@@ -3,3 +3,4 @@ beautifulsoup4
 transmission-rpc
 PySocks
 cloudscraper
+sphinx
