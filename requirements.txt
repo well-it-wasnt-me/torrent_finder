@@ -4,3 +4,4 @@ transmission-rpc
 PySocks
 cloudscraper
 sphinx
+pytest
