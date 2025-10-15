@@ -1,0 +1,22 @@
+{
+  "torznab": {
+    "url": "http://localhost:9117/torznab/all",
+    "apikey": "CHANGE_ME",
+    "categories": "2000",
+    "user_agent": "Mozilla/5.0 (compatible; MagnetFinder/torznab-only 1.0)",
+    "request_timeout": 12.0,
+    "sleep_between_requests": 0.6
+  },
+  "transmission": {
+    "download_dir": "/var/lib/transmission-daemon/downloads/movies",
+    "start": false,
+    "use_rpc": true,
+    "host": "192.168.1.222",
+    "port": 9091,
+    "username": "change_me",
+    "password": "change_me"
+  },
+  "logging": {
+    "level": "INFO"
+  }
+}
