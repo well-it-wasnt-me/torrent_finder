@@ -25,9 +25,13 @@ Example layout
        "username": "transmission",
        "password": "transmission"
      },
-     "logging": {
-       "level": "INFO"
-     }
+   "logging": {
+     "level": "INFO"
+    },
+    "telegram": {
+      "bot_token": "123456:ABC",
+      "chat_id": "123456789"
+    }
    }
 
 Torznab section
@@ -78,6 +82,16 @@ Logging section
 level
    One of ``DEBUG``, ``INFO``, ``WARNING``, ``ERROR``. Defaults to ``INFO``. Use ``--debug`` on the CLI
    to override this setting temporarily.
+
+Telegram section
+----------------
+
+bot_token
+   Telegram bot token obtained from BotFather. Required when this section is present and enables the chat controller.
+
+chat_id
+   Optional numeric chat ID. When provided, only that chat (or channel) may send commands to the bot. Leave it empty
+   to accept messages from any chat that knows the bot’s username.
 
 Applying overrides
 ------------------

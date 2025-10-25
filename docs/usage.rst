@@ -56,3 +56,24 @@ Workflow tips
 - Pair ``--debug`` with a temporary ``--download-dir`` when diagnosing indexer or Transmission issues.
 - If ``transmission-remote`` is not found, toggle RPC mode with ``--use-rpc`` (requires
   ``transmission-rpc`` to be installed in the active environment).
+
+Telegram chat control
+---------------------
+
+A lightweight Telegram bot ships with the project for couch-friendly control:
+
+.. code-block:: bash
+
+   python telegram_bot.py --token "<bot api token>" --config config.json
+
+Flow:
+
+- Send ``search dune part two`` (or any ``search <keywords>`` query).
+- The bot replies with the top five ranked results and seed/peer stats.
+- Respond with the list number to add that torrent to Transmission.
+
+Use the ``TELEGRAM_TOKEN`` environment variable instead of ``--token`` if you prefer, and tweak
+``--max-results`` when you want more or fewer options. The bot shares the same ``config.json`` as
+the CLI, so keep your Torznab/Transmission settings up to date there.
+If you add a ``telegram`` section to the config (see :doc:`configuration`), the bot picks up
+``bot_token``/``chat_id`` automatically.

@@ -53,6 +53,16 @@ yes, the defaults are just suggestions:
 - `torznab.categories` keeps the noise down. Comma-separated, like a grocery list, minus the kale.
 - `transmission.start` decides if Transmission hits the gas or waits politely in park.
 - `logging.level` understands "DEBUG", "INFO", "WARNING", and "ERROR". No, "LOUD" is not an option.
+- Add a `telegram` section when you want the chat bot to pick up credentials:
+
+```json
+"telegram": {
+  "bot_token": "123456:ABC",
+  "chat_id": "123456789"
+}
+```
+
+`chat_id` is optional but keeps random chats from hijacking your downloads.
 
 ## Bootstrap Jackett + FlareSolverr
 If you do not already have Jackett and FlareSolverr on your machine, the project ships with a helper:
@@ -83,6 +93,23 @@ python main.py "Nature Documentary" \
   --password secret \
   --categories "2000,5000"
 ```
+
+## Telegram Chat Control
+Want to drive searches from your phone? Spin up the Telegram bot:
+
+```bash
+pip install -r requirements.txt  # once
+python telegram_bot.py --token "<bot api token>" --config config.json
+```
+
+Flow:
+- Send `search the movie title` to the bot.
+- It responds with the top five matches (seed/leech counts included).
+- Reply with the list number to push that magnet into Transmission.
+
+The token can also come from the `telegram.bot_token` section in `config.json` (or `TELEGRAM_TOKEN`). Add
+`telegram.chat_id` if you want to lock the bot to a single chat/channel. Use `--max-results` to tweak
+how many options are shown.
 
 ## Behind the Curtain
 - `torrent_finder/config.py` loads and validates JSON like a responsible adult.
