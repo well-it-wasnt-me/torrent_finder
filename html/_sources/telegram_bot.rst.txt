@@ -1,7 +1,0 @@
-telegram\_bot module
-====================
-
-.. automodule:: telegram_bot
-   :members:
-   :show-inheritance:
-   :undoc-members:
