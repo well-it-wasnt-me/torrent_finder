@@ -111,6 +111,15 @@ The token can also come from the `telegram.bot_token` section in `config.json` (
 `telegram.chat_id` if you want to lock the bot to a single chat/channel. Use `--max-results` to tweak
 how many options are shown.
 
+## Docs
+The documentation site now uses MkDocs.
+
+```bash
+pip install -r requirements.txt  # already includes mkdocs
+mkdocs serve                     # live-reload server at http://127.0.0.1:8000/
+mkdocs build                     # produce the static site in ./site
+```
+
 ## Behind the Curtain
 - `torrent_finder/config.py` loads and validates JSON like a responsible adult.
 - `torrent_finder/torznab.py` handles the Torznab tango, filters titles, and keeps notes on seeders and leechers.

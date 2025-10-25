@@ -3,6 +3,6 @@ beautifulsoup4
 transmission-rpc
 PySocks
 cloudscraper
-sphinx
 pytest
 python-telegram-bot>=20.6
+mkdocs>=1.5

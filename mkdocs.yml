@@ -1,0 +1,14 @@
+site_name: Torrent Finder
+site_description: Documentation for the torrent_finder toolkit.
+theme:
+  name: readthedocs
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Usage: usage.md
+  - Configuration: configuration.md
+  - API: api.md
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
