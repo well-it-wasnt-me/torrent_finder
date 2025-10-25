@@ -46,11 +46,29 @@ jobs:
 
   ghpages:
     runs-on: ubuntu-latest
+    needs:
+      - tests
     permissions:
-      id-token: write
       contents: write
     steps:
-      - name: GH-PAGES
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install documentation dependencies
+        run: |
+          pip install -r docs/requirements.txt
+
+      - name: Build MkDocs site
+        run: |
+          mkdocs build
+
+      - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
