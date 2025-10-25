@@ -18,5 +18,9 @@
   },
   "logging": {
     "level": "INFO"
+  },
+  "telegram": {
+    "bot_token": "123456:ABC",
+    "chat_id": "123456789"
   }
 }

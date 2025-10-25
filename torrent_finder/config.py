@@ -147,12 +147,51 @@ class LoggingConfig:
 
 
 @dataclass
+class TelegramConfig:
+    """Telegram bot credentials."""
+
+    bot_token: str
+    chat_id: Optional[int] = None
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "TelegramConfig":
+        """
+        Build Telegram configuration from a JSON chunk.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            Telegram section of the configuration file.
+
+        Returns
+        -------
+        TelegramConfig
+            Ready-to-use Telegram settings.
+        """
+
+        bot_token = data.get("bot_token")
+        if not bot_token:
+            raise ConfigError("Telegram bot_token is required when the telegram section is present.")
+
+        chat_id_raw = data.get("chat_id")
+        chat_id = None
+        if chat_id_raw not in (None, ""):
+            try:
+                chat_id = int(chat_id_raw)
+            except (TypeError, ValueError) as exc:
+                raise ConfigError("Telegram chat_id must be an integer.") from exc
+
+        return cls(bot_token=bot_token, chat_id=chat_id)
+
+
+@dataclass
 class AppConfig:
     """Aggregate configuration with Torznab, Transmission, and logging in one friendly bundle."""
 
     torznab: TorznabConfig
     transmission: TransmissionConfig
     logging: LoggingConfig
+    telegram: Optional[TelegramConfig] = None
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "AppConfig":
@@ -182,11 +221,13 @@ class AppConfig:
             raise ConfigError(f"Missing top-level section: {exc.args[0]}") from exc
 
         logging_data = data.get("logging")
+        telegram_data = data.get("telegram")
 
         return cls(
             torznab=TorznabConfig.from_dict(torznab_data),
             transmission=TransmissionConfig.from_dict(transmission_data),
             logging=LoggingConfig.from_dict(logging_data),
+            telegram=TelegramConfig.from_dict(telegram_data) if telegram_data else None,
         )
 
 

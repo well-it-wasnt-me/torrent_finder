@@ -5,3 +5,4 @@ PySocks
 cloudscraper
 sphinx
 pytest
+python-telegram-bot>=20.6
