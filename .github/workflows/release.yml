@@ -6,6 +6,27 @@ on:
       - main
 
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    concurrency: release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run PyTest
+        run: |
+          pytest -v --md=tests/summary.md
+
   release:
     runs-on: ubuntu-latest
     concurrency: release
@@ -22,3 +43,14 @@ jobs:
       uses: python-semantic-release/python-semantic-release@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  ghpages:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - name: GH-PAGES
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
