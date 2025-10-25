@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.2.0 (2025-10-25)
+
+### Documentation
+
+- Implemented how to for telegram
+  ([`34103cf`](https://github.com/well-it-wasnt-me/torrent_finder/commit/34103cffea60d5edc88129b728507d511cff0631))
+
+
 ## v1.1.0 (2025-10-25)
 
 ### Documentation
