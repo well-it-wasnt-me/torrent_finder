@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Usage - Torrent Finder</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Usage";
+        var mkdocs_page_input_path = "usage.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Torrent Finder
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Usage</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#basic-search">Basic search</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command-line options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#workflow-tips">Workflow tips</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#telegram-chat-control">Telegram chat control</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../api/">API</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Torrent Finder</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h1>
+<p>The CLI glues together configuration loading, Torznab searching, and Transmission handoff. You only need to supply a title, but most configuration fields can be overridden per invocation.</p>
+<h2 id="basic-search">Basic search<a class="headerlink" href="#basic-search" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">python main.py &quot;Drunken Master&quot;
+</code></pre>
+<p>The command above loads <code>config.json</code> from the project root, queries the configured Torznab feed, logs the ranked candidates, and sends the top magnet to Transmission using the defaults defined in the configuration file.</p>
+<h2 id="command-line-options">Command-line options<a class="headerlink" href="#command-line-options" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>title</code>: required positional argument that specifies the search phrase sent to Torznab.</li>
+<li><code>--config PATH</code>: alternate path to the JSON configuration file (defaults to <code>config.json</code>).</li>
+<li><code>--download-dir DIR</code>: temporary download directory that overrides the Transmission <code>download_dir</code> setting.</li>
+<li><code>--start / --no-start</code>: force the torrent to start immediately or be added in a paused state.</li>
+<li><code>--use-rpc / --use-remote</code>: switch between Transmission's RPC interface and the <code>transmission-remote</code> CLI regardless of what the configuration specifies.</li>
+<li><code>--host, --port</code>: override the Transmission host and port when connecting over RPC or <code>transmission-remote</code>.</li>
+<li><code>--username, --password</code>: credentials for Transmission RPC mode.</li>
+<li><code>--auth</code>: <code>user:pass</code> combination for the <code>transmission-remote</code> CLI.</li>
+<li><code>--categories</code>: replace the Torznab category filter for this run (comma-separated list).</li>
+<li><code>--debug</code>: elevate logging to <code>DEBUG</code> regardless of the configuration.</li>
+</ul>
+<h2 id="workflow-tips">Workflow tips<a class="headerlink" href="#workflow-tips" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Use the overrides to script batch downloads without touching <code>config.json</code>.</li>
+<li>Pair <code>--debug</code> with a temporary <code>--download-dir</code> when diagnosing indexer or Transmission issues.</li>
+<li>If <code>transmission-remote</code> is not found, toggle RPC mode with <code>--use-rpc</code> (requires <code>transmission-rpc</code> to be installed in the active environment).</li>
+</ul>
+<h2 id="telegram-chat-control">Telegram chat control<a class="headerlink" href="#telegram-chat-control" title="Permanent link">&para;</a></h2>
+<p>A lightweight Telegram bot ships with the project for couch-friendly control:</p>
+<pre><code class="language-bash">python telegram_bot.py --config config.json
+</code></pre>
+<p>Flow:</p>
+<ol>
+<li>Send <code>search Cowboy Bepop</code> (or any <code>search &lt;keywords&gt;</code> query).</li>
+<li>The bot replies with the top five ranked results and seed/peer stats.</li>
+<li>Respond with the list number to add that torrent to Transmission.</li>
+</ol>
+<p>Populate the <code>telegram</code> section of <code>config.json</code> with your <code>bot_token</code> (and optional <code>chat_id</code>) or override with <code>--token</code> / <code>--chat-id</code>. Tweak <code>--max-results</code> when you want more or fewer options. The bot shares the same <code>config.json</code> as the CLI, so keep your Torznab/Transmission settings up to date there.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../getting_started/" class="btn btn-neutral float-left" title="Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../configuration/" class="btn btn-neutral float-right" title="Configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../getting_started/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../configuration/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
