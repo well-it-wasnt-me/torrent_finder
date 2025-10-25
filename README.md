@@ -54,6 +54,21 @@ yes, the defaults are just suggestions:
 - `transmission.start` decides if Transmission hits the gas or waits politely in park.
 - `logging.level` understands "DEBUG", "INFO", "WARNING", and "ERROR". No, "LOUD" is not an option.
 
+## Bootstrap Jackett + FlareSolverr
+If you do not already have Jackett and FlareSolverr on your machine, the project ships with a helper:
+
+```bash
+python scripts/setup_indexing_stack.py
+```
+
+What it does:
+- Detects running instances before doing anything destructive.
+- Writes a `docker-compose.yml` (linuxserver/jackett + ghcr.io/flaresolverr) under `~/.local/share/torrent_finder/stack` and brings it up via Docker.
+- Links Jackett to FlareSolverr, imports a handful of public trackers (`1337x`, `torrentgalaxyclone`, `yts`, `eztv`, `nyaasi`, `limetorrents` by default), and surfaces the API key.
+- Updates `config.json` when `torznab.url`/`apikey` are still on the placeholder values.
+
+Use `--help` for overrides (custom ports, tracker list, skipping Docker, or forcing a config update). Docker has to be installed if you want the automatic install; otherwise run with `--no-docker` and the script will only perform the API wiring.
+
 ## Fire It Up
 ```bash
 python main.py "I wil not write the tile of the movie here"

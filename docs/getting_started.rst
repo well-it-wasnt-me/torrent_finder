@@ -36,6 +36,24 @@ Start from the sample file, then see :doc:`configuration` for every available op
 
    cp config.example.json config.json
 
+Bootstrap Jackett + FlareSolverr
+--------------------------------
+
+Need a Jackett + FlareSolverr pair without the clickfest? Use the bundled helper:
+
+.. code-block:: bash
+
+   python scripts/setup_indexing_stack.py
+
+It will:
+
+- detect existing instances before touching anything,
+- (optionally) write a Docker Compose stack under ``~/.local/share/torrent_finder/stack`` and spin up linuxserver/jackett + ghcr.io/flaresolverr,
+- link Jackett to FlareSolverr, configure a curated list of public trackers, and grab the Torznab API key,
+- update ``config.json`` whenever ``torznab.url``/``torznab.apikey`` are still on placeholder values.
+
+Pass ``--help`` to the script for more knobs (custom tracker list, ports, or skipping Docker entirely when you manage the services yourself).
+
 Verify the installation
 -----------------------
 
