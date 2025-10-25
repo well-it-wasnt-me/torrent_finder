@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Getting started &#8212; torrent_finder  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="torrent_finder documentation" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="torrent_finder documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">torrent_finder  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Getting started</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
+<p>This project targets Python 3.10+ and assumes you have a Torznab/Jackett instance as well as
+Transmission available somewhere on your network. The steps below get the repository ready for use
+or further hacking.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Python 3.10 or newer.</p></li>
+<li><p>Access to a Torznab/Jackett feed with a valid API key.</p></li>
+<li><p>Transmission installed locally or reachable over the network (RPC or <code class="docutils literal notranslate"><span class="pre">transmission-remote</span></code>).</p></li>
+</ul>
+</section>
+<section id="create-an-isolated-environment">
+<h2>Create an isolated environment<a class="headerlink" href="#create-an-isolated-environment" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</pre></div>
+</div>
+</section>
+<section id="install-dependencies">
+<h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="set-up-configuration">
+<h2>Set up configuration<a class="headerlink" href="#set-up-configuration" title="Link to this heading">¶</a></h2>
+<p>Start from the sample file, then see <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> for every available option.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>config.example.json<span class="w"> </span>config.json
+</pre></div>
+</div>
+</section>
+<section id="bootstrap-jackett-flaresolverr">
+<h2>Bootstrap Jackett + FlareSolverr<a class="headerlink" href="#bootstrap-jackett-flaresolverr" title="Link to this heading">¶</a></h2>
+<p>Need a Jackett + FlareSolverr pair without the clickfest? Use the bundled helper:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>scripts/setup_indexing_stack.py
+</pre></div>
+</div>
+<p>It will:</p>
+<ul class="simple">
+<li><p>detect existing instances before touching anything,</p></li>
+<li><p>(optionally) write a Docker Compose stack under <code class="docutils literal notranslate"><span class="pre">~/.local/share/torrent_finder/stack</span></code> and spin up linuxserver/jackett + ghcr.io/flaresolverr,</p></li>
+<li><p>link Jackett to FlareSolverr, configure a curated list of public trackers, and grab the Torznab API key,</p></li>
+<li><p>update <code class="docutils literal notranslate"><span class="pre">config.json</span></code> whenever <code class="docutils literal notranslate"><span class="pre">torznab.url</span></code>/<code class="docutils literal notranslate"><span class="pre">torznab.apikey</span></code> are still on placeholder values.</p></li>
+</ul>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">--help</span></code> to the script for more knobs (custom tracker list, ports, or skipping Docker entirely when you manage the services yourself).</p>
+</section>
+<section id="verify-the-installation">
+<h2>Verify the installation<a class="headerlink" href="#verify-the-installation" title="Link to this heading">¶</a></h2>
+<p>Run the unit tests to confirm the environment is wired correctly.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+<p>From here you are ready to explore <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> or build out your own automation on top of the API.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Getting started</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#create-an-isolated-environment">Create an isolated environment</a></li>
+<li><a class="reference internal" href="#install-dependencies">Install dependencies</a></li>
+<li><a class="reference internal" href="#set-up-configuration">Set up configuration</a></li>
+<li><a class="reference internal" href="#bootstrap-jackett-flaresolverr">Bootstrap Jackett + FlareSolverr</a></li>
+<li><a class="reference internal" href="#verify-the-installation">Verify the installation</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">torrent_finder documentation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="usage.html"
+                          title="next chapter">Usage</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/getting_started.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="torrent_finder documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">torrent_finder  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Getting started</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Well It Wasnt Me.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

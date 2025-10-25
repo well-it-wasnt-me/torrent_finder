@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>torrent_finder.finder &#8212; torrent_finder  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">torrent_finder  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">torrent_finder.finder</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for torrent_finder.finder</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">High-level torrent selection logic.</span>
+
+<span class="sd">Listens to the Torznab, assign a score and crowns the winner without breaking a sweat.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.torznab</span><span class="w"> </span><span class="kn">import</span> <span class="n">TorznabClient</span>
+
+
+<div class="viewcode-block" id="TorrentFinder">
+<a class="viewcode-back" href="../../torrent_finder.html#torrent_finder.finder.TorrentFinder">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TorrentFinder</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wraps TorznabClient to fetch candidates and choose the best one.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">torznab_client</span><span class="p">:</span> <span class="n">TorznabClient</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        torznab_client : TorznabClient</span>
+<span class="sd">            I refuse to write what this is.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_torznab</span> <span class="o">=</span> <span class="n">torznab_client</span>
+
+<div class="viewcode-block" id="TorrentFinder.find_candidates">
+<a class="viewcode-back" href="../../torrent_finder.html#torrent_finder.finder.TorrentFinder.find_candidates">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Candidate</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pull a fresh list of matching torrents.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        title : str</span>
+<span class="sd">            Search term supplied by the user.</span>
+<span class="sd">        debug : bool, optional</span>
+<span class="sd">            Enable verbose Torznab logging, default is ``False``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[Candidate]</span>
+<span class="sd">            All candidate torrents the indexer coughed up.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_torznab</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Finder received </span><span class="si">%d</span><span class="s2"> candidates&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">candidates</span></div>
+
+
+<div class="viewcode-block" id="TorrentFinder.pick_best">
+<a class="viewcode-back" href="../../torrent_finder.html#torrent_finder.finder.TorrentFinder.pick_best">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pick_best</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Candidate</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Candidate</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select the highest-ranked candidate.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        candidates : list[Candidate]</span>
+<span class="sd">            Potential torrents waiting to be judged.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Candidate | None</span>
+<span class="sd">            The top-ranked candidate, or ``None`` if the search is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">candidate</span><span class="p">:</span> <span class="n">candidate</span><span class="o">.</span><span class="n">rank_tuple</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Best candidate: </span><span class="si">%s</span><span class="s2"> | seeders=</span><span class="si">%s</span><span class="s2"> leechers=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">best</span><span class="o">.</span><span class="n">title</span> <span class="ow">or</span> <span class="s2">&quot;(no title)&quot;</span><span class="p">,</span>
+            <span class="n">best</span><span class="o">.</span><span class="n">seeders</span><span class="p">,</span>
+            <span class="n">best</span><span class="o">.</span><span class="n">leechers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">best</span></div>
+</div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">torrent_finder  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">torrent_finder.finder</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Well It Wasnt Me.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

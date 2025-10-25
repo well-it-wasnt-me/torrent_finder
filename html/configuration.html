@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Configuration &#8212; torrent_finder  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API reference" href="modules.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="API reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">torrent_finder  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Configuration</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
+<p>The application reads a single JSON document (<code class="docutils literal notranslate"><span class="pre">config.json</span></code> by default) that controls Torznab
+queries, Transmission interaction, and log verbosity. Start from the sample file that ships in the
+repository, then adjust the sections described below.</p>
+<section id="example-layout">
+<h2>Example layout<a class="headerlink" href="#example-layout" title="Link to this heading">¶</a></h2>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;torznab&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:9117/jackett/torznab/all&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;apikey&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CHANGE_ME&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;categories&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2000&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;transmission&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;download_dir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/path/to/save&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_rpc&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">9091</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;transmission&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;transmission&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="nt">&quot;logging&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span>
+<span class="w"> </span><span class="p">},</span>
+<span class="w"> </span><span class="nt">&quot;telegram&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;bot_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123456:ABC&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;chat_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123456789&quot;</span>
+<span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="torznab-section">
+<h2>Torznab section<a class="headerlink" href="#torznab-section" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>url</dt><dd><p>Base Torznab/Jackett endpoint (required).</p>
+</dd>
+<dt>apikey</dt><dd><p>API key for the feed (required).</p>
+</dd>
+<dt>categories</dt><dd><p>Optional comma-separated category identifiers to filter search results.</p>
+</dd>
+<dt>user_agent</dt><dd><p>Custom HTTP <code class="docutils literal notranslate"><span class="pre">User-Agent</span></code> string. Defaults to <code class="docutils literal notranslate"><span class="pre">Mozilla/5.0</span> <span class="pre">(compatible;</span> <span class="pre">MagnetFinder/torznab-only</span> <span class="pre">1.0)</span></code>.</p>
+</dd>
+<dt>request_timeout</dt><dd><p>Timeout in seconds for Torznab requests (float, default <code class="docutils literal notranslate"><span class="pre">12.0</span></code>).</p>
+</dd>
+<dt>sleep_between_requests</dt><dd><p>Delay in seconds between Torznab requests to avoid hammering the indexer (float, default <code class="docutils literal notranslate"><span class="pre">0.6</span></code>).</p>
+</dd>
+</dl>
+</section>
+<section id="transmission-section">
+<h2>Transmission section<a class="headerlink" href="#transmission-section" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>download_dir</dt><dd><p>Destination directory for completed or in-progress downloads (required).</p>
+</dd>
+<dt>start</dt><dd><p>Whether torrents should start immediately after being added (default <code class="docutils literal notranslate"><span class="pre">False</span></code>).</p>
+</dd>
+<dt>use_rpc</dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">true</span></code> to use the Transmission RPC interface; <code class="docutils literal notranslate"><span class="pre">false</span></code> switches to the <code class="docutils literal notranslate"><span class="pre">transmission-remote</span></code> CLI.</p>
+</dd>
+<dt>host, port</dt><dd><p>Where Transmission is reachable. Defaults to <code class="docutils literal notranslate"><span class="pre">localhost</span></code> and <code class="docutils literal notranslate"><span class="pre">9091</span></code>.</p>
+</dd>
+<dt>username, password</dt><dd><p>RPC credentials when <code class="docutils literal notranslate"><span class="pre">use_rpc</span></code> is enabled. Leave <code class="docutils literal notranslate"><span class="pre">null</span></code> to connect without authentication.</p>
+</dd>
+<dt>auth</dt><dd><p><code class="docutils literal notranslate"><span class="pre">user:pass</span></code> credentials for the <code class="docutils literal notranslate"><span class="pre">transmission-remote</span></code> CLI.</p>
+</dd>
+</dl>
+</section>
+<section id="logging-section">
+<h2>Logging section<a class="headerlink" href="#logging-section" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>level</dt><dd><p>One of <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>, <code class="docutils literal notranslate"><span class="pre">INFO</span></code>, <code class="docutils literal notranslate"><span class="pre">WARNING</span></code>, <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">INFO</span></code>. Use <code class="docutils literal notranslate"><span class="pre">--debug</span></code> on the CLI
+to override this setting temporarily.</p>
+</dd>
+</dl>
+</section>
+<section id="telegram-section">
+<h2>Telegram section<a class="headerlink" href="#telegram-section" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>bot_token</dt><dd><p>Telegram bot token obtained from BotFather. Required when this section is present and enables the chat controller.</p>
+</dd>
+<dt>chat_id</dt><dd><p>Optional numeric chat ID. When provided, only that chat (or channel) may send commands to the bot. Leave it empty
+to accept messages from any chat that knows the bot’s username.</p>
+</dd>
+</dl>
+</section>
+<section id="applying-overrides">
+<h2>Applying overrides<a class="headerlink" href="#applying-overrides" title="Link to this heading">¶</a></h2>
+<p>Every command-line flag documented in <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> maps to a configuration key. CLI overrides are
+applied after <code class="docutils literal notranslate"><span class="pre">config.json</span></code> is loaded, letting you script temporary tweaks without editing the
+JSON file.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Configuration</a><ul>
+<li><a class="reference internal" href="#example-layout">Example layout</a></li>
+<li><a class="reference internal" href="#torznab-section">Torznab section</a></li>
+<li><a class="reference internal" href="#transmission-section">Transmission section</a></li>
+<li><a class="reference internal" href="#logging-section">Logging section</a></li>
+<li><a class="reference internal" href="#telegram-section">Telegram section</a></li>
+<li><a class="reference internal" href="#applying-overrides">Applying overrides</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="usage.html"
+                          title="previous chapter">Usage</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="modules.html"
+                          title="next chapter">API reference</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/configuration.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="API reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">torrent_finder  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Configuration</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Well It Wasnt Me.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

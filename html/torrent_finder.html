@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>torrent_finder package &#8212; torrent_finder  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="main module" href="main.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="main.html" title="main module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">torrent_finder  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">API reference</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">torrent_finder package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="torrent-finder-package">
+<h1>torrent_finder package<a class="headerlink" href="#torrent-finder-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-torrent_finder.config">
+<span id="torrent-finder-config-module"></span><h2>torrent_finder.config module<a class="headerlink" href="#module-torrent_finder.config" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.config.AppConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.config.</span></span><span class="sig-name descname"><span class="pre">AppConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torznab</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TorznabConfig" title="torrent_finder.config.TorznabConfig"><span class="pre">TorznabConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">transmission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TransmissionConfig" title="torrent_finder.config.TransmissionConfig"><span class="pre">TransmissionConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.LoggingConfig" title="torrent_finder.config.LoggingConfig"><span class="pre">LoggingConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">telegram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TelegramConfig" title="torrent_finder.config.TelegramConfig"><span class="pre">TelegramConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#AppConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.AppConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Aggregate configuration with Torznab, Transmission, and logging in one friendly bundle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.config.AppConfig.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.AppConfig" title="torrent_finder.config.AppConfig"><span class="pre">AppConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#AppConfig.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.AppConfig.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Stitch together the full configuration set from JSON.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">dict[str, Any]</span></dt><dd><p>Entire configuration payload.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>AppConfig</dt><dd><p>Everything the app needs to know, tied up in a dataclass bow.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ConfigError</dt><dd><p>If you’re missing a top-level section, which is the config equivalent of forgetting your only child at a bus stop.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.AppConfig.logging">
+<span class="sig-name descname"><span class="pre">logging</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#torrent_finder.config.LoggingConfig" title="torrent_finder.config.LoggingConfig"><span class="pre">LoggingConfig</span></a></em><a class="headerlink" href="#torrent_finder.config.AppConfig.logging" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.AppConfig.telegram">
+<span class="sig-name descname"><span class="pre">telegram</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#torrent_finder.config.TelegramConfig" title="torrent_finder.config.TelegramConfig"><span class="pre">TelegramConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.config.AppConfig.telegram" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.AppConfig.torznab">
+<span class="sig-name descname"><span class="pre">torznab</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#torrent_finder.config.TorznabConfig" title="torrent_finder.config.TorznabConfig"><span class="pre">TorznabConfig</span></a></em><a class="headerlink" href="#torrent_finder.config.AppConfig.torznab" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.AppConfig.transmission">
+<span class="sig-name descname"><span class="pre">transmission</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#torrent_finder.config.TransmissionConfig" title="torrent_finder.config.TransmissionConfig"><span class="pre">TransmissionConfig</span></a></em><a class="headerlink" href="#torrent_finder.config.AppConfig.transmission" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="torrent_finder.config.ConfigError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.config.</span></span><span class="sig-name descname"><span class="pre">ConfigError</span></span><a class="reference internal" href="_modules/torrent_finder/config.html#ConfigError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.ConfigError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raised when configuration loading faceplants harder than you after reading this.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.config.ConfigLoader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.config.</span></span><span class="sig-name descname"><span class="pre">ConfigLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#ConfigLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.ConfigLoader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Loads application configuration from JSON files and delivers it.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.config.ConfigLoader.apply_overrides">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">apply_overrides</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.AppConfig" title="torrent_finder.config.AppConfig"><span class="pre">AppConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.AppConfig" title="torrent_finder.config.AppConfig"><span class="pre">AppConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#ConfigLoader.apply_overrides"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.ConfigLoader.apply_overrides" title="Link to this definition">¶</a></dt>
+<dd><p>Update the in-memory configuration with CLI overrides.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>config<span class="classifier">AppConfig</span></dt><dd><p>The baseline configuration, straight from the JSON file.</p>
+</dd>
+<dt>overrides<span class="classifier">dict[str, Any]</span></dt><dd><p>CLI overrides.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>AppConfig</dt><dd><p>The same object, adjusted in place just for this whim.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.config.ConfigLoader.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.AppConfig" title="torrent_finder.config.AppConfig"><span class="pre">AppConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#ConfigLoader.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.ConfigLoader.load" title="Link to this definition">¶</a></dt>
+<dd><p>Read and validate the configuration file.</p>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>AppConfig</dt><dd><p>The fully parsed configuration bundle.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Raises<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ConfigError</dt><dd><p>When the file is missing or invalid.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.config.LoggingConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.config.</span></span><span class="sig-name descname"><span class="pre">LoggingConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#LoggingConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.LoggingConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Lightweight logging configuration for when INFO just isn’t loud enough.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.config.LoggingConfig.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.LoggingConfig" title="torrent_finder.config.LoggingConfig"><span class="pre">LoggingConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#LoggingConfig.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.LoggingConfig.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Create a logging config from a dict.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">dict[str, Any] | None</span></dt><dd><p>Optional logging section. <code class="docutils literal notranslate"><span class="pre">None</span></code> means we stick with INFO like responsible adults.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>LoggingConfig</dt><dd><p>The final logging level wrapped in a dataclass hug.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.LoggingConfig.level">
+<span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'INFO'</span></em><a class="headerlink" href="#torrent_finder.config.LoggingConfig.level" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.config.TelegramConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.config.</span></span><span class="sig-name descname"><span class="pre">TelegramConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chat_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#TelegramConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.TelegramConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Telegram bot credentials.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TelegramConfig.bot_token">
+<span class="sig-name descname"><span class="pre">bot_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#torrent_finder.config.TelegramConfig.bot_token" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TelegramConfig.chat_id">
+<span class="sig-name descname"><span class="pre">chat_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.config.TelegramConfig.chat_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.config.TelegramConfig.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.TelegramConfig" title="torrent_finder.config.TelegramConfig"><span class="pre">TelegramConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#TelegramConfig.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.TelegramConfig.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Build Telegram configuration from a JSON chunk.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">dict[str, Any]</span></dt><dd><p>Telegram section of the configuration file.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Returns<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>TelegramConfig</dt><dd><p>Ready-to-use Telegram settings.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.config.TorznabConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.config.</span></span><span class="sig-name descname"><span class="pre">TorznabConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apikey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Mozilla/5.0</span> <span class="pre">(compatible;</span> <span class="pre">MagnetFinder/torznab-only</span> <span class="pre">1.0)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep_between_requests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#TorznabConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.TorznabConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Settings for Torznab/Jackett, a.k.a. the talent scout.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TorznabConfig.apikey">
+<span class="sig-name descname"><span class="pre">apikey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#torrent_finder.config.TorznabConfig.apikey" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TorznabConfig.categories">
+<span class="sig-name descname"><span class="pre">categories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.config.TorznabConfig.categories" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.config.TorznabConfig.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.TorznabConfig" title="torrent_finder.config.TorznabConfig"><span class="pre">TorznabConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#TorznabConfig.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.TorznabConfig.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Build an instance from raw configuration data.</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">dict[str, Any]</span></dt><dd><p>Chunk of config JSON scoped to Torznab.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>TorznabConfig</dt><dd><p>Fully hydrated config object ready for that first HTTP handshake.</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h3>Raises<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ConfigError</dt><dd><p>If the essentials are missing, like forgetting your car key inside the car and the car is closed.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TorznabConfig.request_timeout">
+<span class="sig-name descname"><span class="pre">request_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12.0</span></em><a class="headerlink" href="#torrent_finder.config.TorznabConfig.request_timeout" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TorznabConfig.sleep_between_requests">
+<span class="sig-name descname"><span class="pre">sleep_between_requests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.6</span></em><a class="headerlink" href="#torrent_finder.config.TorznabConfig.sleep_between_requests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TorznabConfig.url">
+<span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#torrent_finder.config.TorznabConfig.url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TorznabConfig.user_agent">
+<span class="sig-name descname"><span class="pre">user_agent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Mozilla/5.0</span> <span class="pre">(compatible;</span> <span class="pre">MagnetFinder/torznab-only</span> <span class="pre">1.0)'</span></em><a class="headerlink" href="#torrent_finder.config.TorznabConfig.user_agent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.config.</span></span><span class="sig-name descname"><span class="pre">TransmissionConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">download_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_rpc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'localhost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">9091</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#TransmissionConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.TransmissionConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Transmission connection details: who we call, how we call them, and whether to bring alcohol.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.auth">
+<span class="sig-name descname"><span class="pre">auth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.auth" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.download_dir">
+<span class="sig-name descname"><span class="pre">download_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.download_dir" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.TransmissionConfig" title="torrent_finder.config.TransmissionConfig"><span class="pre">TransmissionConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#TransmissionConfig.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Build a TransmissionConfig from a JSON blob.</p>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">dict[str, Any]</span></dt><dd><p>Configuration chunk dedicated to Transmission.</p>
+</dd>
+</dl>
+</section>
+<section id="id13">
+<h3>Returns<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>TransmissionConfig</dt><dd><p>The settings TransmissionController expects.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h3>Raises<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ConfigError</dt><dd><p>If the download directory is missing, because we like knowing where the loot goes.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.host">
+<span class="sig-name descname"><span class="pre">host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'localhost'</span></em><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.host" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.password" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.port">
+<span class="sig-name descname"><span class="pre">port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9091</span></em><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.port" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.start">
+<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.start" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.use_rpc">
+<span class="sig-name descname"><span class="pre">use_rpc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.use_rpc" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.config.TransmissionConfig.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.config.TransmissionConfig.username" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-torrent_finder.finder">
+<span id="torrent-finder-finder-module"></span><h2>torrent_finder.finder module<a class="headerlink" href="#module-torrent_finder.finder" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.finder.TorrentFinder">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.finder.</span></span><span class="sig-name descname"><span class="pre">TorrentFinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torznab_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.torznab.TorznabClient" title="torrent_finder.torznab.TorznabClient"><span class="pre">TorznabClient</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/finder.html#TorrentFinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.finder.TorrentFinder" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wraps TorznabClient to fetch candidates and choose the best one.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.finder.TorrentFinder.find_candidates">
+<span class="sig-name descname"><span class="pre">find_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#torrent_finder.models.Candidate" title="torrent_finder.models.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/torrent_finder/finder.html#TorrentFinder.find_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.finder.TorrentFinder.find_candidates" title="Link to this definition">¶</a></dt>
+<dd><p>Pull a fresh list of matching torrents.</p>
+<section id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>title<span class="classifier">str</span></dt><dd><p>Search term supplied by the user.</p>
+</dd>
+<dt>debug<span class="classifier">bool, optional</span></dt><dd><p>Enable verbose Torznab logging, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h3>Returns<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>list[Candidate]</dt><dd><p>All candidate torrents the indexer coughed up.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.finder.TorrentFinder.pick_best">
+<span class="sig-name descname"><span class="pre">pick_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#torrent_finder.models.Candidate" title="torrent_finder.models.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.models.Candidate" title="torrent_finder.models.Candidate"><span class="pre">Candidate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/torrent_finder/finder.html#TorrentFinder.pick_best"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.finder.TorrentFinder.pick_best" title="Link to this definition">¶</a></dt>
+<dd><p>Select the highest-ranked candidate.</p>
+<section id="id17">
+<h3>Parameters<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidates<span class="classifier">list[Candidate]</span></dt><dd><p>Potential torrents waiting to be judged.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h3>Returns<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Candidate | None</dt><dd><p>The top-ranked candidate, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the search is empty.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-torrent_finder.models">
+<span id="torrent-finder-models-module"></span><h2>torrent_finder.models module<a class="headerlink" href="#module-torrent_finder.models" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.models.Candidate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.models.</span></span><span class="sig-name descname"><span class="pre">Candidate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magnet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leechers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'torznab'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/models.html#Candidate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.models.Candidate" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a single torrent candidate, charming as me.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.models.Candidate.leechers">
+<span class="sig-name descname"><span class="pre">leechers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.models.Candidate.leechers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.models.Candidate.magnet">
+<span class="sig-name descname"><span class="pre">magnet</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#torrent_finder.models.Candidate.magnet" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.models.Candidate.rank_tuple">
+<span class="sig-name descname"><span class="pre">rank_tuple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/torrent_finder/models.html#Candidate.rank_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.models.Candidate.rank_tuple" title="Link to this definition">¶</a></dt>
+<dd><p>Produce a ranking tuple for torrents.</p>
+<section id="id19">
+<h3>Returns<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>tuple</dt><dd><p><code class="docutils literal notranslate"><span class="pre">(seeders,</span> <span class="pre">ratio,</span> <span class="pre">has_counts)</span></code> - enough info to pick what you need.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.models.Candidate.seeders">
+<span class="sig-name descname"><span class="pre">seeders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.models.Candidate.seeders" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.models.Candidate.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'torznab'</span></em><a class="headerlink" href="#torrent_finder.models.Candidate.source" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.models.Candidate.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.models.Candidate.title" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-torrent_finder.torznab">
+<span id="torrent-finder-torznab-module"></span><h2>torrent_finder.torznab module<a class="headerlink" href="#module-torrent_finder.torznab" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.torznab.TorznabClient">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.torznab.</span></span><span class="sig-name descname"><span class="pre">TorznabClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TorznabConfig" title="torrent_finder.config.TorznabConfig"><span class="pre">TorznabConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/torznab.html#TorznabClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.torznab.TorznabClient" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Thin wrapper around requests.Session dedicated to Torznab endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.torznab.TorznabClient.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#torrent_finder.models.Candidate" title="torrent_finder.models.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/torrent_finder/torznab.html#TorznabClient.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.torznab.TorznabClient.search" title="Link to this definition">¶</a></dt>
+<dd><p>Query Torznab for candidates that match <code class="docutils literal notranslate"><span class="pre">title</span></code>.</p>
+<section id="id20">
+<h3>Parameters<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>title<span class="classifier">str</span></dt><dd><p>Search phrase, presumably legal and tasteful.</p>
+</dd>
+<dt>debug<span class="classifier">bool, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">True</span></code> emits extra logging so you can narrate the drama.</p>
+</dd>
+</dl>
+</section>
+<section id="id21">
+<h3>Returns<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>list[Candidate]</dt><dd><p>Candidates that survived parsing and filtering.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-torrent_finder.transmission">
+<span id="torrent-finder-transmission-module"></span><h2>torrent_finder.transmission module<a class="headerlink" href="#module-torrent_finder.transmission" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.transmission.TransmissionController">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.transmission.</span></span><span class="sig-name descname"><span class="pre">TransmissionController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TransmissionConfig" title="torrent_finder.config.TransmissionConfig"><span class="pre">TransmissionConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/transmission.html#TransmissionController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.transmission.TransmissionController" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Coordinate adds to Transmission.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.transmission.TransmissionController.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magnet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_override</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/torrent_finder/transmission.html#TransmissionController.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.transmission.TransmissionController.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add the magnet link via the configured interface.</p>
+<section id="id22">
+<h3>Parameters<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>magnet<span class="classifier">str</span></dt><dd><p>Magnet URI to send to Transmission.</p>
+</dd>
+<dt>start_override<span class="classifier">bool, optional</span></dt><dd><p>Override the start/paused behavior for just this call.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.transmission.TransmissionController.ensure_available">
+<span class="sig-name descname"><span class="pre">ensure_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/torrent_finder/transmission.html#TransmissionController.ensure_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.transmission.TransmissionController.ensure_available" title="Link to this definition">¶</a></dt>
+<dd><p>Verify that the configured Transmission interface is reachable.</p>
+<section id="id23">
+<h3>Raises<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>SystemExit</dt><dd><p>If neither the RPC library nor the CLI binary can be found, depending on the mode.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-torrent_finder">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-torrent_finder" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.AppConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.</span></span><span class="sig-name descname"><span class="pre">AppConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torznab</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TorznabConfig" title="torrent_finder.config.TorznabConfig"><span class="pre">TorznabConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">transmission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TransmissionConfig" title="torrent_finder.config.TransmissionConfig"><span class="pre">TransmissionConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.LoggingConfig" title="torrent_finder.config.LoggingConfig"><span class="pre">LoggingConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">telegram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TelegramConfig" title="torrent_finder.config.TelegramConfig"><span class="pre">TelegramConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#AppConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.AppConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Aggregate configuration with Torznab, Transmission, and logging in one friendly bundle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.AppConfig.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.AppConfig" title="torrent_finder.config.AppConfig"><span class="pre">AppConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#AppConfig.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.AppConfig.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Stitch together the full configuration set from JSON.</p>
+<section id="id24">
+<h3>Parameters<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">dict[str, Any]</span></dt><dd><p>Entire configuration payload.</p>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h3>Returns<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>AppConfig</dt><dd><p>Everything the app needs to know, tied up in a dataclass bow.</p>
+</dd>
+</dl>
+</section>
+<section id="id26">
+<h3>Raises<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ConfigError</dt><dd><p>If you’re missing a top-level section, which is the config equivalent of forgetting your only child at a bus stop.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.AppConfig.logging">
+<span class="sig-name descname"><span class="pre">logging</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#torrent_finder.config.LoggingConfig" title="torrent_finder.config.LoggingConfig"><span class="pre">LoggingConfig</span></a></em><a class="headerlink" href="#torrent_finder.AppConfig.logging" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.AppConfig.telegram">
+<span class="sig-name descname"><span class="pre">telegram</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#torrent_finder.config.TelegramConfig" title="torrent_finder.config.TelegramConfig"><span class="pre">TelegramConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.AppConfig.telegram" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.AppConfig.torznab">
+<span class="sig-name descname"><span class="pre">torznab</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#torrent_finder.config.TorznabConfig" title="torrent_finder.config.TorznabConfig"><span class="pre">TorznabConfig</span></a></em><a class="headerlink" href="#torrent_finder.AppConfig.torznab" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.AppConfig.transmission">
+<span class="sig-name descname"><span class="pre">transmission</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#torrent_finder.config.TransmissionConfig" title="torrent_finder.config.TransmissionConfig"><span class="pre">TransmissionConfig</span></a></em><a class="headerlink" href="#torrent_finder.AppConfig.transmission" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.ConfigLoader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.</span></span><span class="sig-name descname"><span class="pre">ConfigLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#ConfigLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.ConfigLoader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Loads application configuration from JSON files and delivers it.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.ConfigLoader.apply_overrides">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">apply_overrides</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.AppConfig" title="torrent_finder.config.AppConfig"><span class="pre">AppConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.AppConfig" title="torrent_finder.config.AppConfig"><span class="pre">AppConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#ConfigLoader.apply_overrides"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.ConfigLoader.apply_overrides" title="Link to this definition">¶</a></dt>
+<dd><p>Update the in-memory configuration with CLI overrides.</p>
+<section id="id27">
+<h3>Parameters<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>config<span class="classifier">AppConfig</span></dt><dd><p>The baseline configuration, straight from the JSON file.</p>
+</dd>
+<dt>overrides<span class="classifier">dict[str, Any]</span></dt><dd><p>CLI overrides.</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h3>Returns<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>AppConfig</dt><dd><p>The same object, adjusted in place just for this whim.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.ConfigLoader.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.AppConfig" title="torrent_finder.config.AppConfig"><span class="pre">AppConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#ConfigLoader.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.ConfigLoader.load" title="Link to this definition">¶</a></dt>
+<dd><p>Read and validate the configuration file.</p>
+<section id="id29">
+<h3>Returns<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>AppConfig</dt><dd><p>The fully parsed configuration bundle.</p>
+</dd>
+</dl>
+</section>
+<section id="id30">
+<h3>Raises<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ConfigError</dt><dd><p>When the file is missing or invalid.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.TorrentFinder">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.</span></span><span class="sig-name descname"><span class="pre">TorrentFinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torznab_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.torznab.TorznabClient" title="torrent_finder.torznab.TorznabClient"><span class="pre">TorznabClient</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/finder.html#TorrentFinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TorrentFinder" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wraps TorznabClient to fetch candidates and choose the best one.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.TorrentFinder.find_candidates">
+<span class="sig-name descname"><span class="pre">find_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#torrent_finder.models.Candidate" title="torrent_finder.models.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/torrent_finder/finder.html#TorrentFinder.find_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TorrentFinder.find_candidates" title="Link to this definition">¶</a></dt>
+<dd><p>Pull a fresh list of matching torrents.</p>
+<section id="id31">
+<h3>Parameters<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>title<span class="classifier">str</span></dt><dd><p>Search term supplied by the user.</p>
+</dd>
+<dt>debug<span class="classifier">bool, optional</span></dt><dd><p>Enable verbose Torznab logging, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="id32">
+<h3>Returns<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>list[Candidate]</dt><dd><p>All candidate torrents the indexer coughed up.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.TorrentFinder.pick_best">
+<span class="sig-name descname"><span class="pre">pick_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#torrent_finder.models.Candidate" title="torrent_finder.models.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.models.Candidate" title="torrent_finder.models.Candidate"><span class="pre">Candidate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/torrent_finder/finder.html#TorrentFinder.pick_best"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TorrentFinder.pick_best" title="Link to this definition">¶</a></dt>
+<dd><p>Select the highest-ranked candidate.</p>
+<section id="id33">
+<h3>Parameters<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>candidates<span class="classifier">list[Candidate]</span></dt><dd><p>Potential torrents waiting to be judged.</p>
+</dd>
+</dl>
+</section>
+<section id="id34">
+<h3>Returns<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Candidate | None</dt><dd><p>The top-ranked candidate, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the search is empty.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.TorznabClient">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.</span></span><span class="sig-name descname"><span class="pre">TorznabClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TorznabConfig" title="torrent_finder.config.TorznabConfig"><span class="pre">TorznabConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/torznab.html#TorznabClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TorznabClient" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Thin wrapper around requests.Session dedicated to Torznab endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.TorznabClient.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#torrent_finder.models.Candidate" title="torrent_finder.models.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/torrent_finder/torznab.html#TorznabClient.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TorznabClient.search" title="Link to this definition">¶</a></dt>
+<dd><p>Query Torznab for candidates that match <code class="docutils literal notranslate"><span class="pre">title</span></code>.</p>
+<section id="id35">
+<h3>Parameters<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>title<span class="classifier">str</span></dt><dd><p>Search phrase, presumably legal and tasteful.</p>
+</dd>
+<dt>debug<span class="classifier">bool, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">True</span></code> emits extra logging so you can narrate the drama.</p>
+</dd>
+</dl>
+</section>
+<section id="id36">
+<h3>Returns<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>list[Candidate]</dt><dd><p>Candidates that survived parsing and filtering.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.TorznabConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.</span></span><span class="sig-name descname"><span class="pre">TorznabConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apikey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Mozilla/5.0</span> <span class="pre">(compatible;</span> <span class="pre">MagnetFinder/torznab-only</span> <span class="pre">1.0)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep_between_requests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#TorznabConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TorznabConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Settings for Torznab/Jackett, a.k.a. the talent scout.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TorznabConfig.apikey">
+<span class="sig-name descname"><span class="pre">apikey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#torrent_finder.TorznabConfig.apikey" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TorznabConfig.categories">
+<span class="sig-name descname"><span class="pre">categories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.TorznabConfig.categories" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.TorznabConfig.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.TorznabConfig" title="torrent_finder.config.TorznabConfig"><span class="pre">TorznabConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#TorznabConfig.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TorznabConfig.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Build an instance from raw configuration data.</p>
+<section id="id37">
+<h3>Parameters<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">dict[str, Any]</span></dt><dd><p>Chunk of config JSON scoped to Torznab.</p>
+</dd>
+</dl>
+</section>
+<section id="id38">
+<h3>Returns<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>TorznabConfig</dt><dd><p>Fully hydrated config object ready for that first HTTP handshake.</p>
+</dd>
+</dl>
+</section>
+<section id="id39">
+<h3>Raises<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ConfigError</dt><dd><p>If the essentials are missing, like forgetting your car key inside the car and the car is closed.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TorznabConfig.request_timeout">
+<span class="sig-name descname"><span class="pre">request_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12.0</span></em><a class="headerlink" href="#torrent_finder.TorznabConfig.request_timeout" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TorznabConfig.sleep_between_requests">
+<span class="sig-name descname"><span class="pre">sleep_between_requests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.6</span></em><a class="headerlink" href="#torrent_finder.TorznabConfig.sleep_between_requests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TorznabConfig.url">
+<span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#torrent_finder.TorznabConfig.url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TorznabConfig.user_agent">
+<span class="sig-name descname"><span class="pre">user_agent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Mozilla/5.0</span> <span class="pre">(compatible;</span> <span class="pre">MagnetFinder/torznab-only</span> <span class="pre">1.0)'</span></em><a class="headerlink" href="#torrent_finder.TorznabConfig.user_agent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.</span></span><span class="sig-name descname"><span class="pre">TransmissionConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">download_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_rpc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'localhost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">9091</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/config.html#TransmissionConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TransmissionConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Transmission connection details: who we call, how we call them, and whether to bring alcohol.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.auth">
+<span class="sig-name descname"><span class="pre">auth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.TransmissionConfig.auth" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.download_dir">
+<span class="sig-name descname"><span class="pre">download_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#torrent_finder.TransmissionConfig.download_dir" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torrent_finder.config.TransmissionConfig" title="torrent_finder.config.TransmissionConfig"><span class="pre">TransmissionConfig</span></a></span></span><a class="reference internal" href="_modules/torrent_finder/config.html#TransmissionConfig.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TransmissionConfig.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Build a TransmissionConfig from a JSON blob.</p>
+<section id="id40">
+<h3>Parameters<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">dict[str, Any]</span></dt><dd><p>Configuration chunk dedicated to Transmission.</p>
+</dd>
+</dl>
+</section>
+<section id="id41">
+<h3>Returns<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>TransmissionConfig</dt><dd><p>The settings TransmissionController expects.</p>
+</dd>
+</dl>
+</section>
+<section id="id42">
+<h3>Raises<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ConfigError</dt><dd><p>If the download directory is missing, because we like knowing where the loot goes.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.host">
+<span class="sig-name descname"><span class="pre">host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'localhost'</span></em><a class="headerlink" href="#torrent_finder.TransmissionConfig.host" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.TransmissionConfig.password" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.port">
+<span class="sig-name descname"><span class="pre">port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9091</span></em><a class="headerlink" href="#torrent_finder.TransmissionConfig.port" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.start">
+<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#torrent_finder.TransmissionConfig.start" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.use_rpc">
+<span class="sig-name descname"><span class="pre">use_rpc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#torrent_finder.TransmissionConfig.use_rpc" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionConfig.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#torrent_finder.TransmissionConfig.username" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionController">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torrent_finder.</span></span><span class="sig-name descname"><span class="pre">TransmissionController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#torrent_finder.config.TransmissionConfig" title="torrent_finder.config.TransmissionConfig"><span class="pre">TransmissionConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torrent_finder/transmission.html#TransmissionController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TransmissionController" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Coordinate adds to Transmission.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionController.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magnet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_override</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/torrent_finder/transmission.html#TransmissionController.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TransmissionController.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add the magnet link via the configured interface.</p>
+<section id="id43">
+<h3>Parameters<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>magnet<span class="classifier">str</span></dt><dd><p>Magnet URI to send to Transmission.</p>
+</dd>
+<dt>start_override<span class="classifier">bool, optional</span></dt><dd><p>Override the start/paused behavior for just this call.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torrent_finder.TransmissionController.ensure_available">
+<span class="sig-name descname"><span class="pre">ensure_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/torrent_finder/transmission.html#TransmissionController.ensure_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torrent_finder.TransmissionController.ensure_available" title="Link to this definition">¶</a></dt>
+<dd><p>Verify that the configured Transmission interface is reachable.</p>
+<section id="id44">
+<h3>Raises<a class="headerlink" href="#id44" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>SystemExit</dt><dd><p>If neither the RPC library nor the CLI binary can be found, depending on the mode.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">torrent_finder package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-torrent_finder.config">torrent_finder.config module</a><ul>
+<li><a class="reference internal" href="#torrent_finder.config.AppConfig"><code class="docutils literal notranslate"><span class="pre">AppConfig</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.config.AppConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">AppConfig.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.AppConfig.logging"><code class="docutils literal notranslate"><span class="pre">AppConfig.logging</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.AppConfig.telegram"><code class="docutils literal notranslate"><span class="pre">AppConfig.telegram</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.AppConfig.torznab"><code class="docutils literal notranslate"><span class="pre">AppConfig.torznab</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.AppConfig.transmission"><code class="docutils literal notranslate"><span class="pre">AppConfig.transmission</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.config.ConfigError"><code class="docutils literal notranslate"><span class="pre">ConfigError</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.ConfigLoader"><code class="docutils literal notranslate"><span class="pre">ConfigLoader</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.config.ConfigLoader.apply_overrides"><code class="docutils literal notranslate"><span class="pre">ConfigLoader.apply_overrides()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.ConfigLoader.load"><code class="docutils literal notranslate"><span class="pre">ConfigLoader.load()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.config.LoggingConfig"><code class="docutils literal notranslate"><span class="pre">LoggingConfig</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.config.LoggingConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">LoggingConfig.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.LoggingConfig.level"><code class="docutils literal notranslate"><span class="pre">LoggingConfig.level</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.config.TelegramConfig"><code class="docutils literal notranslate"><span class="pre">TelegramConfig</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.config.TelegramConfig.bot_token"><code class="docutils literal notranslate"><span class="pre">TelegramConfig.bot_token</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TelegramConfig.chat_id"><code class="docutils literal notranslate"><span class="pre">TelegramConfig.chat_id</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TelegramConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">TelegramConfig.from_dict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.config.TorznabConfig"><code class="docutils literal notranslate"><span class="pre">TorznabConfig</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.config.TorznabConfig.apikey"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.apikey</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TorznabConfig.categories"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.categories</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TorznabConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TorznabConfig.request_timeout"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.request_timeout</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TorznabConfig.sleep_between_requests"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.sleep_between_requests</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TorznabConfig.url"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.url</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TorznabConfig.user_agent"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.user_agent</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.auth"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.auth</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.download_dir"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.download_dir</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.host"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.host</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.password"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.password</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.port"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.port</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.start"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.start</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.use_rpc"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.use_rpc</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.config.TransmissionConfig.username"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.username</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-torrent_finder.finder">torrent_finder.finder module</a><ul>
+<li><a class="reference internal" href="#torrent_finder.finder.TorrentFinder"><code class="docutils literal notranslate"><span class="pre">TorrentFinder</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.finder.TorrentFinder.find_candidates"><code class="docutils literal notranslate"><span class="pre">TorrentFinder.find_candidates()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.finder.TorrentFinder.pick_best"><code class="docutils literal notranslate"><span class="pre">TorrentFinder.pick_best()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-torrent_finder.models">torrent_finder.models module</a><ul>
+<li><a class="reference internal" href="#torrent_finder.models.Candidate"><code class="docutils literal notranslate"><span class="pre">Candidate</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.models.Candidate.leechers"><code class="docutils literal notranslate"><span class="pre">Candidate.leechers</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.models.Candidate.magnet"><code class="docutils literal notranslate"><span class="pre">Candidate.magnet</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.models.Candidate.rank_tuple"><code class="docutils literal notranslate"><span class="pre">Candidate.rank_tuple()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.models.Candidate.seeders"><code class="docutils literal notranslate"><span class="pre">Candidate.seeders</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.models.Candidate.source"><code class="docutils literal notranslate"><span class="pre">Candidate.source</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.models.Candidate.title"><code class="docutils literal notranslate"><span class="pre">Candidate.title</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-torrent_finder.torznab">torrent_finder.torznab module</a><ul>
+<li><a class="reference internal" href="#torrent_finder.torznab.TorznabClient"><code class="docutils literal notranslate"><span class="pre">TorznabClient</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.torznab.TorznabClient.search"><code class="docutils literal notranslate"><span class="pre">TorznabClient.search()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-torrent_finder.transmission">torrent_finder.transmission module</a><ul>
+<li><a class="reference internal" href="#torrent_finder.transmission.TransmissionController"><code class="docutils literal notranslate"><span class="pre">TransmissionController</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.transmission.TransmissionController.add"><code class="docutils literal notranslate"><span class="pre">TransmissionController.add()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.transmission.TransmissionController.ensure_available"><code class="docutils literal notranslate"><span class="pre">TransmissionController.ensure_available()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-torrent_finder">Module contents</a><ul>
+<li><a class="reference internal" href="#torrent_finder.AppConfig"><code class="docutils literal notranslate"><span class="pre">AppConfig</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.AppConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">AppConfig.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.AppConfig.logging"><code class="docutils literal notranslate"><span class="pre">AppConfig.logging</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.AppConfig.telegram"><code class="docutils literal notranslate"><span class="pre">AppConfig.telegram</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.AppConfig.torznab"><code class="docutils literal notranslate"><span class="pre">AppConfig.torznab</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.AppConfig.transmission"><code class="docutils literal notranslate"><span class="pre">AppConfig.transmission</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.ConfigLoader"><code class="docutils literal notranslate"><span class="pre">ConfigLoader</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.ConfigLoader.apply_overrides"><code class="docutils literal notranslate"><span class="pre">ConfigLoader.apply_overrides()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.ConfigLoader.load"><code class="docutils literal notranslate"><span class="pre">ConfigLoader.load()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.TorrentFinder"><code class="docutils literal notranslate"><span class="pre">TorrentFinder</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.TorrentFinder.find_candidates"><code class="docutils literal notranslate"><span class="pre">TorrentFinder.find_candidates()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TorrentFinder.pick_best"><code class="docutils literal notranslate"><span class="pre">TorrentFinder.pick_best()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.TorznabClient"><code class="docutils literal notranslate"><span class="pre">TorznabClient</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.TorznabClient.search"><code class="docutils literal notranslate"><span class="pre">TorznabClient.search()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.TorznabConfig"><code class="docutils literal notranslate"><span class="pre">TorznabConfig</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.TorznabConfig.apikey"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.apikey</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TorznabConfig.categories"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.categories</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TorznabConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TorznabConfig.request_timeout"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.request_timeout</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TorznabConfig.sleep_between_requests"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.sleep_between_requests</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TorznabConfig.url"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.url</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TorznabConfig.user_agent"><code class="docutils literal notranslate"><span class="pre">TorznabConfig.user_agent</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.auth"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.auth</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.download_dir"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.download_dir</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.host"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.host</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.password"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.password</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.port"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.port</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.start"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.start</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.use_rpc"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.use_rpc</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionConfig.username"><code class="docutils literal notranslate"><span class="pre">TransmissionConfig.username</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionController"><code class="docutils literal notranslate"><span class="pre">TransmissionController</span></code></a><ul>
+<li><a class="reference internal" href="#torrent_finder.TransmissionController.add"><code class="docutils literal notranslate"><span class="pre">TransmissionController.add()</span></code></a></li>
+<li><a class="reference internal" href="#torrent_finder.TransmissionController.ensure_available"><code class="docutils literal notranslate"><span class="pre">TransmissionController.ensure_available()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="main.html"
+                          title="previous chapter">main module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/torrent_finder.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="main.html" title="main module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">torrent_finder  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API reference</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">torrent_finder package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Well It Wasnt Me.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>
