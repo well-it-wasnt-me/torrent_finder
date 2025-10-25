@@ -25,7 +25,7 @@ jobs:
 
       - name: Run PyTest
         run: |
-          pytest -v --md=tests/summary.md
+          pytest -v
 
   release:
     runs-on: ubuntu-latest
