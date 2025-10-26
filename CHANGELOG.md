@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.3.0 (2025-10-26)
+
+### Features
+
+- Now telegram tells you when the download is ready and you can ask for the status
+  ([`ae4bf9a`](https://github.com/well-it-wasnt-me/torrent_finder/commit/ae4bf9a4ab09f9aa2c0178ff19531d52946e4ed4))
+
+
 ## Unreleased
 
 ### Features
