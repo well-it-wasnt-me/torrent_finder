@@ -289,9 +289,10 @@ class TelegramTorrentController:
         return None
 
     def enable_background_tasks(self, application: Application, interval_seconds: int = 30) -> None:
-        if not application.job_queue:
+        job_queue = getattr(application, "_job_queue", None)
+        if not job_queue:
             return
-        application.job_queue.run_repeating(
+        job_queue.run_repeating(
             self._poll_downloads,
             interval=interval_seconds,
             first=interval_seconds,

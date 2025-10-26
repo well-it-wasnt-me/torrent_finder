@@ -113,6 +113,19 @@ The token can also come from the `telegram.bot_token` section in `config.json` (
 `telegram.chat_id` if you want to lock the bot to a single chat/channel. Use `--max-results` to tweak
 how many options are shown.
 
+> **Heads up:** background status polling uses Python Telegram Bot's JobQueue. Install the optional extra via
+> `pip install "python-telegram-bot[job-queue]"` to enable the completion pings.
+
+## Formatting
+Install the dev tooling once and let Black keep indentation sane:
+
+```bash
+pip install -r requirements-dev.txt
+black .
+```
+
+Use `black --check .` locally or in CI to make sure everything stays formatted.
+
 ## Docs
 The documentation site now uses MkDocs.
 

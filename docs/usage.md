@@ -45,3 +45,6 @@ Flow:
 4. Send `status` to check in on active downloads; the bot auto-notifies you when a Telegram-triggered download finishes.
 
 Populate the `telegram` section of `config.json` with your `bot_token` (and optional `chat_id`) or override with `--token` / `--chat-id`. Tweak `--max-results` when you want more or fewer options. The bot shares the same `config.json` as the CLI, so keep your Torznab/Transmission settings up to date there.
+
+!!! tip
+    Auto-notifications for finished torrents rely on the Telegram JobQueue. Install the optional dependency via `pip install "python-telegram-bot[job-queue]"` so the bot can schedule those background checks.

@@ -15,6 +15,7 @@
 ### Features
 
 - Telegram bot can report Transmission's active downloads with `status` and pings chats when Telegram-triggered torrents finish.
+- Added Black configuration/dev requirements to keep formatting consistent.
 
 ## v1.2.1 (2025-10-25)
 
