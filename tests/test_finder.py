@@ -11,6 +11,7 @@ from torrent_finder.models import Candidate
 
 class TorrentFinderTests(unittest.TestCase):
     """Confirm that TorrentFinder can spot a winner without night-vision goggles."""
+
     def test_pick_best_returns_highest_rank(self) -> None:
         candidates = [
             Candidate(magnet="magnet:one", title="One", seeders=10, leechers=5),

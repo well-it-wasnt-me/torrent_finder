@@ -11,6 +11,7 @@ from torrent_finder.transmission import TransmissionController
 
 class TransmissionControllerTests(unittest.TestCase):
     """Stress-test RPC vs CLI behavior without waking the actual daemon."""
+
     @patch("torrent_finder.transmission.shutil.which", return_value="/usr/bin/transmission-remote")
     def test_ensure_available_remote(self, which_mock) -> None:
         config = TransmissionConfig(download_dir="/downloads", use_rpc=False)
@@ -73,11 +74,15 @@ class TransmissionControllerTests(unittest.TestCase):
                 self.__dict__.update(kwargs)
 
         client_mock.return_value.get_torrents.return_value = [
-            DummyTorrent(id=1, name="Active", status="downloading", percentDone=0.5, eta=120, magnetLink="magnet:?xt=aaaa"),
+            DummyTorrent(
+                id=1, name="Active", status="downloading", percentDone=0.5, eta=120, magnetLink="magnet:?xt=aaaa"
+            ),
             DummyTorrent(id=2, name="Done", status="seeding", percentDone=1.0, eta=-1, magnetLink="magnet:?xt=bbbb"),
         ]
 
-        config = TransmissionConfig(download_dir="/downloads", use_rpc=True, host="host", port=9091, username="user", password="pass")
+        config = TransmissionConfig(
+            download_dir="/downloads", use_rpc=True, host="host", port=9091, username="user", password="pass"
+        )
         controller = TransmissionController(config)
         statuses = controller.list_torrents(active_only=True)
         self.assertEqual(len(statuses), 1)

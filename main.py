@@ -34,8 +34,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config", default="config.json", help="Path to the JSON configuration file.")
 
     parser.add_argument("--download-dir", help="Override download directory for this run.")
-    parser.add_argument("--start", dest="start", action="store_const", const=True, default=None, help="Start download immediately.")
-    parser.add_argument("--no-start", dest="start", action="store_const", const=False, help="Add paused regardless of config.")
+    parser.add_argument(
+        "--start", dest="start", action="store_const", const=True, default=None, help="Start download immediately."
+    )
+    parser.add_argument(
+        "--no-start", dest="start", action="store_const", const=False, help="Add paused regardless of config."
+    )
     parser.add_argument(
         "--use-rpc",
         dest="use_rpc",
