@@ -140,9 +140,9 @@ class TelegramTorrentController:
         if text.lower().startswith("search "):
             query = text[7:].strip()
             if not query:
-            await self._reply(update, "Give me something to search for, e.g. `search dune`.", markdown=True)
-            return
-        await self._perform_search(update, query)
+                await self._reply(update, "Give me something to search for, e.g. `search dune`.", markdown=True)
+                return
+            await self._perform_search(update, query)
         elif text.lower() == "status":
             await self._send_status(update)
         elif text.isdigit():
