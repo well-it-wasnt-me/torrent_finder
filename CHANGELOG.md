@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.3.3 (2025-10-26)
+
+### Bug Fixes
+
+- Torznab schema fix
+  ([`df8ecf6`](https://github.com/well-it-wasnt-me/torrent_finder/commit/df8ecf6b2c50cbda472a4ee5a27fed41bec17be9))
+
+### Chores
+
+- Excluding folder for black
+  ([`fd855b7`](https://github.com/well-it-wasnt-me/torrent_finder/commit/fd855b7b81394ba701623439d55ed341fe236d57))
+
+
 ## v1.3.2 (2025-10-26)
 
 
