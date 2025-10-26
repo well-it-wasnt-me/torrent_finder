@@ -19,8 +19,9 @@ import argparse
 import asyncio
 import logging
 import os
+import uuid
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from telegram import Update
 from telegram.ext import Application, ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
@@ -70,6 +71,14 @@ class PendingSearch:
     candidates: List[Candidate]
 
 
+@dataclass
+class TrackedDownload:
+    tracking_id: str
+    chat_id: int
+    title: str
+    magnet: str
+
+
 class TelegramTorrentController:
     """Bridges Telegram updates to TorrentFinder and Transmission."""
 
@@ -85,11 +94,17 @@ class TelegramTorrentController:
         self._max_results = max(1, max_results)
         self._allowed_chat_id = allowed_chat_id
         self._pending: Dict[int, PendingSearch] = {}
+        self._tracked_downloads: Dict[str, TrackedDownload] = {}
+        self._tracking_lock = asyncio.Lock()
 
     async def handle_start(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
             return
-        await self._reply(update, "Send `search <title>` to see the top torrents, then respond with the number to download.", markdown=True)
+        await self._reply(
+            update,
+            "Send `search <title>` to see the top torrents, `status` to inspect active downloads, then respond with the number to download.",
+            markdown=True,
+        )
 
     async def handle_help(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
@@ -99,9 +114,15 @@ class TelegramTorrentController:
             "Commands:\n"
             "- `search <title>`: look up torrents and see the top matches.\n"
             "- `<number>`: pick one of the previously listed torrents to start the download.\n"
+            "- `status`: show Transmission's active downloads.\n"
             "- `/help`: show this message again.",
             markdown=True,
         )
+
+    async def handle_status_command(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+        if not self._is_authorized(update):
+            return
+        await self._send_status(update)
 
     async def handle_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not update.message or not update.message.text:
@@ -119,13 +140,18 @@ class TelegramTorrentController:
         if text.lower().startswith("search "):
             query = text[7:].strip()
             if not query:
-                await self._reply(update, "Give me something to search for, e.g. `search dune`.", markdown=True)
-                return
-            await self._perform_search(update, query)
+            await self._reply(update, "Give me something to search for, e.g. `search dune`.", markdown=True)
+            return
+        await self._perform_search(update, query)
+        elif text.lower() == "status":
+            await self._send_status(update)
         elif text.isdigit():
             await self._handle_selection(update, chat_id, int(text))
         else:
-            await self._reply(update, "Say `search <title>` to look for something, or send a number to pick from the last list.")
+            await self._reply(
+                update,
+                "Say `search <title>` to look for something, `status` to inspect active torrents, or send a number to pick from the last list.",
+            )
 
     async def _perform_search(self, update: Update, query: str) -> None:
         await self._reply(update, f"Searching for “{query}”…")
@@ -175,11 +201,102 @@ class TelegramTorrentController:
             await self._reply(update, f"Transmission said nope: {exc}")
             return
 
+        await self._remember_download(chat_id, candidate)
         await self._reply(update, "Done. Want something else?")
 
     def _enqueue_download(self, candidate: Candidate) -> None:
         self._transmission.ensure_available()
         self._transmission.add(candidate.magnet, start_override=None)
+
+    async def _remember_download(self, chat_id: int, candidate: Candidate) -> None:
+        tracking_id = uuid.uuid4().hex
+        tracked = TrackedDownload(
+            tracking_id=tracking_id,
+            chat_id=chat_id,
+            title=candidate.title or "(untitled)",
+            magnet=candidate.magnet,
+        )
+        async with self._tracking_lock:
+            self._tracked_downloads[tracking_id] = tracked
+
+    async def _send_status(self, update: Update) -> None:
+        await self._reply(update, "Checking Transmission…")
+        loop = asyncio.get_running_loop()
+        try:
+            statuses = await loop.run_in_executor(None, self._transmission.list_torrents, True)
+        except SystemExit as exc:  # pragma: no cover - defensive
+            LOGGER.warning("Transmission status check aborted: %s", exc)
+            await self._reply(update, f"Status check failed: {exc}")
+            return
+        except Exception as exc:  # pragma: no cover - defensive
+            LOGGER.exception("Failed to inspect Transmission")
+            await self._reply(update, f"Status check failed: {exc}")
+            return
+
+        if not statuses:
+            await self._reply(update, "No active torrents in Transmission.")
+            return
+
+        lines = ["Active torrents:"]
+        for status in statuses:
+            eta = status.eta or "unknown"
+            lines.append(f"- {status.name} — {status.percent_done:.1f}% ({status.status}, ETA: {eta})")
+        await self._reply(update, "\n".join(lines))
+
+    async def _poll_downloads(self, context: ContextTypes.DEFAULT_TYPE) -> None:
+        async with self._tracking_lock:
+            tracked_items = list(self._tracked_downloads.items())
+
+        if not tracked_items:
+            return
+
+        loop = asyncio.get_running_loop()
+        try:
+            statuses = await loop.run_in_executor(None, self._transmission.list_torrents, False)
+        except SystemExit as exc:  # pragma: no cover - defensive
+            LOGGER.warning("Transmission status poll aborted: %s", exc)
+            return
+        except Exception as exc:  # pragma: no cover - defensive
+            LOGGER.warning("Transmission status poll failed: %s", exc)
+            return
+
+        completed: List[Tuple[str, TrackedDownload]] = []
+        for tracking_id, tracked in tracked_items:
+            status = self._match_status(statuses, tracked)
+            if status and status.is_complete:
+                completed.append((tracking_id, tracked))
+                text = f"✅ Torrent ready: {status.name}"
+                await context.bot.send_message(chat_id=tracked.chat_id, text=text)
+
+        if not completed:
+            return
+
+        async with self._tracking_lock:
+            for tracking_id, _ in completed:
+                self._tracked_downloads.pop(tracking_id, None)
+
+    @staticmethod
+    def _match_status(
+        statuses: List[TransmissionController.TorrentStatus],
+        tracked: TrackedDownload,
+    ) -> Optional[TransmissionController.TorrentStatus]:
+        title = tracked.title.lower() if tracked.title else None
+        for status in statuses:
+            if status.magnet and tracked.magnet and status.magnet == tracked.magnet:
+                return status
+            if title and status.name and status.name.lower() == title:
+                return status
+        return None
+
+    def enable_background_tasks(self, application: Application, interval_seconds: int = 30) -> None:
+        if not application.job_queue:
+            return
+        application.job_queue.run_repeating(
+            self._poll_downloads,
+            interval=interval_seconds,
+            first=interval_seconds,
+            name="torrent-download-monitor",
+        )
 
     @staticmethod
     async def _reply(update: Update, text: str, markdown: bool = False) -> None:
@@ -207,7 +324,9 @@ def build_app(config: AppConfig, token: str, max_results: int, chat_id: Optional
     application = ApplicationBuilder().token(token).build()
     application.add_handler(CommandHandler("start", controller.handle_start))
     application.add_handler(CommandHandler("help", controller.handle_help))
+    application.add_handler(CommandHandler("status", controller.handle_status_command))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, controller.handle_text))
+    controller.enable_background_tasks(application)
     return application
 
 

@@ -106,6 +106,8 @@ Flow:
 - Send `search the movie title` to the bot.
 - It responds with the top five matches (seed/leech counts included).
 - Reply with the list number to push that magnet into Transmission.
+- Send `status` any time to see active downloads and their progress.
+- The bot pings you once a Telegram-triggered download finishes so you can hit play quicker.
 
 The token can also come from the `telegram.bot_token` section in `config.json` (or `TELEGRAM_TOKEN`). Add
 `telegram.chat_id` if you want to lock the bot to a single chat/channel. Use `--max-results` to tweak

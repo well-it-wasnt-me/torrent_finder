@@ -42,5 +42,6 @@ Flow:
 1. Send `search Cowboy Bepop` (or any `search <keywords>` query).
 2. The bot replies with the top five ranked results and seed/peer stats.
 3. Respond with the list number to add that torrent to Transmission.
+4. Send `status` to check in on active downloads; the bot auto-notifies you when a Telegram-triggered download finishes.
 
 Populate the `telegram` section of `config.json` with your `bot_token` (and optional `chat_id`) or override with `--token` / `--chat-id`. Tweak `--max-results` when you want more or fewer options. The bot shares the same `config.json` as the CLI, so keep your Torznab/Transmission settings up to date there.
