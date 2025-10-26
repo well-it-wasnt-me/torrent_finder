@@ -14,5 +14,6 @@ exclude = '''
   | site
   | venv
   | env
+  | .venv
 )/
 '''
