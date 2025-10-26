@@ -9,6 +9,7 @@ returns torrents that might actually be worth your time.
 
 import logging
 import re
+import threading
 import time
 import xml.etree.ElementTree as ET
 from typing import List, Optional
@@ -74,7 +75,7 @@ class TorznabClient:
         """
 
         self.config = config
-        self._session = self._make_session()
+        self._session_local = threading.local()
 
     def _make_session(self) -> requests.Session:
         """
@@ -88,6 +89,17 @@ class TorznabClient:
 
         session = requests.Session()
         session.headers.update({"User-Agent": self.config.user_agent, "Accept-Language": "en-US,en;q=0.7"})
+        return session
+
+    def _get_session(self) -> requests.Session:
+        """
+        Return a thread-local session instance.
+        """
+
+        session = getattr(self._session_local, "session", None)
+        if session is None:
+            session = self._make_session()
+            self._session_local.session = session
         return session
 
     def search(self, title: str, debug: bool = False) -> List[Candidate]:
@@ -109,8 +121,10 @@ class TorznabClient:
 
         params = self._build_params(title)
 
+        session = self._get_session()
+
         try:
-            response = self._session.get(
+            response = session.get(
                 self.config.url,
                 params=params,
                 timeout=self.config.request_timeout,
