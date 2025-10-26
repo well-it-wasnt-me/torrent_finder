@@ -254,4 +254,17 @@ class TorznabClient:
         if link is not None and link.text and link.text.strip().lower().startswith("magnet:"):
             return link.text.strip()
 
+        guid = item.find("guid")
+        if guid is not None and guid.text:
+            text = guid.text.strip()
+            if text.lower().startswith("magnet:"):
+                return text
+
+        for attr in item.findall("{http://torznab.com/schemas/2015/feed}attr"):
+            name = (attr.get("name") or "").lower()
+            if name in {"magneturl", "magneturi", "magnet"}:
+                value = (attr.get("value") or "").strip()
+                if value.lower().startswith("magnet:"):
+                    return value
+
         return None
