@@ -133,25 +133,26 @@ class TorznabClient:
             logging.error("Torznab request failed: %s", exc)
             return []
 
+        body_preview = response.text[:600]
         time.sleep(self.config.sleep_between_requests)
 
         if response.status_code != 200:
-            if debug:
-                logging.warning("Torznab status %s, head: %r", response.status_code, response.text[:600])
+            logging.warning("Torznab status %s, head: %r", response.status_code, body_preview)
             return []
 
         try:
             root = ET.fromstring(response.content)
         except ET.ParseError:
-            if debug:
-                logging.warning("Torznab non-XML head: %r", response.text[:600])
+            logging.warning("Torznab non-XML head: %r", body_preview)
             return []
 
         items = root.findall(".//item")
         if debug:
             logging.info("Torznab raw items: %d", len(items))
             if not items:
-                logging.warning("Torznab 200 but zero items. Body head: %r", response.text[:600])
+                logging.warning("Torznab 200 but zero items. Body head: %r", body_preview)
+        elif not items:
+            logging.debug("Torznab 200 but zero items. Body head: %r", body_preview)
 
         candidates = self._parse_items(items, title)
 

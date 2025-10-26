@@ -116,6 +116,9 @@ how many options are shown.
 > **Heads up:** background status polling uses Python Telegram Bot's JobQueue. Install the optional extra via
 > `pip install "python-telegram-bot[job-queue]"` to enable the completion pings.
 
+Crank telemetry up with `--telemetry-level DEBUG` (or pass `--torznab-debug`) when you need the raw Jackett
+response previews logged to stdout—handy when a feed returns zero results and you want to know why.
+
 ## Formatting
 Install the dev tooling once and let Black keep indentation sane:
 

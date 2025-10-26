@@ -48,3 +48,6 @@ Populate the `telegram` section of `config.json` with your `bot_token` (and opti
 
 !!! tip
     Auto-notifications for finished torrents rely on the Telegram JobQueue. Install the optional dependency via `pip install "python-telegram-bot[job-queue]"` so the bot can schedule those background checks.
+
+Need to troubleshoot Jackett responses? Run with `--telemetry-level DEBUG` or pass the dedicated
+`--torznab-debug` flag to log a preview of the Torznab feed whenever it comes back empty.

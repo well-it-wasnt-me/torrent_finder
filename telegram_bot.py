@@ -62,6 +62,11 @@ def parse_args() -> argparse.Namespace:
         default="INFO",
         help="Logging level for stdout (DEBUG/INFO/WARNING/ERROR).",
     )
+    parser.add_argument(
+        "--torznab-debug",
+        action="store_true",
+        help="Emit verbose Torznab logs (implied when --telemetry-level DEBUG).",
+    )
     return parser.parse_args()
 
 
@@ -88,11 +93,13 @@ class TelegramTorrentController:
         transmission: TransmissionController,
         max_results: int,
         allowed_chat_id: Optional[int] = None,
+            torznab_debug: bool = False,
     ):
         self._finder = finder
         self._transmission = transmission
         self._max_results = max(1, max_results)
         self._allowed_chat_id = allowed_chat_id
+        self._torznab_debug = torznab_debug
         self._pending: Dict[int, PendingSearch] = {}
         self._tracked_downloads: Dict[str, TrackedDownload] = {}
         self._tracking_lock = asyncio.Lock()
@@ -157,7 +164,7 @@ class TelegramTorrentController:
         await self._reply(update, f"Searching for “{query}”…")
         loop = asyncio.get_running_loop()
         try:
-            candidates = await loop.run_in_executor(None, self._finder.find_candidates, query, False)
+            candidates = await loop.run_in_executor(None, self._finder.find_candidates, query, self._torznab_debug)
         except Exception as exc:  # pragma: no cover - defensive, Finder already logs
             LOGGER.exception("Torznab search failed")
             await self._reply(update, f"Search failed: {exc}")
@@ -316,11 +323,23 @@ class TelegramTorrentController:
         return True
 
 
-def build_app(config: AppConfig, token: str, max_results: int, chat_id: Optional[int]) -> Application:
+def build_app(
+        config: AppConfig,
+        token: str,
+        max_results: int,
+        chat_id: Optional[int],
+        torznab_debug: bool,
+) -> Application:
     torznab = TorznabClient(config.torznab)
     finder = TorrentFinder(torznab)
     transmission = TransmissionController(config.transmission)
-    controller = TelegramTorrentController(finder, transmission, max_results=max_results, allowed_chat_id=chat_id)
+    controller = TelegramTorrentController(
+        finder,
+        transmission,
+        max_results=max_results,
+        allowed_chat_id=chat_id,
+        torznab_debug=torznab_debug,
+    )
 
     application = ApplicationBuilder().token(token).build()
     application.add_handler(CommandHandler("start", controller.handle_start))
@@ -350,7 +369,9 @@ def main() -> None:
     if chat_id is None and telegram_config and telegram_config.chat_id:
         chat_id = telegram_config.chat_id
 
-    application = build_app(config, token, args.max_results, chat_id)
+    torznab_debug = args.torznab_debug or args.telemetry_level.upper() == "DEBUG"
+
+    application = build_app(config, token, args.max_results, chat_id, torznab_debug)
 
     LOGGER.info("Starting Telegram bot in polling mode.")
     application.run_polling()
