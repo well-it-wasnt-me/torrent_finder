@@ -3,6 +3,7 @@ from __future__ import annotations
 """Tests that keep the Transmission controller from drunk-dialing."""
 
 import unittest
+from datetime import timedelta
 from unittest.mock import MagicMock, patch
 
 from torrent_finder.config import TransmissionConfig
@@ -118,6 +119,11 @@ class TransmissionControllerTests(unittest.TestCase):
         active = controller.list_torrents(active_only=True)
         self.assertEqual(len(active), 1)
         self.assertEqual(active[0].name, "Alpha Download")
+
+    def test_format_eta_handles_timedelta_and_floats(self) -> None:
+        self.assertEqual(TransmissionController._format_eta_seconds(90), "1m")
+        self.assertEqual(TransmissionController._format_eta_seconds(90.5), "1m")
+        self.assertEqual(TransmissionController._format_eta_seconds(timedelta(seconds=30)), "30s")
 
 
 if __name__ == "__main__":

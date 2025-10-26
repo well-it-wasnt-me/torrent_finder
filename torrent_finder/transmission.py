@@ -11,8 +11,9 @@ import logging
 import re
 import shutil
 import subprocess
+from datetime import timedelta
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from .config import TransmissionConfig
 
@@ -308,10 +309,19 @@ class TransmissionController:
         return value
 
     @staticmethod
-    def _format_eta_seconds(seconds: Optional[int]) -> Optional[str]:
-        if seconds is None or seconds < 0:
+    def _format_eta_seconds(seconds: Optional[Union[int, float, timedelta]]) -> Optional[str]:
+        if seconds is None:
             return None
-        minutes, sec = divmod(int(seconds), 60)
+        if isinstance(seconds, timedelta):
+            total_seconds = int(seconds.total_seconds())
+        else:
+            try:
+                total_seconds = int(float(seconds))
+            except (TypeError, ValueError):
+                return None
+        if total_seconds < 0:
+            return None
+        minutes, sec = divmod(total_seconds, 60)
         hours, minutes = divmod(minutes, 60)
         days, hours = divmod(hours, 24)
         parts = []
