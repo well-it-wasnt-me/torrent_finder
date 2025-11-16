@@ -385,6 +385,12 @@ def main() -> None:
         print(f"Docker compose    : {compose_file}")
     print(f"Trackers added    : {', '.join(added) if added else 'none (already present)'}")
     print(f"Config updated    : {'yes' if config_changed else 'no changes'}")
+    print(
+        "\nNext steps:\n"
+        f"  1. Visit {jackett_url} in your browser.\n"
+        "  2. Add or update your Jackett indexers (none are added automatically).\n"
+        "  3. Copy the Torznab API key from the Jackett dashboard into config.json if it wasn't updated automatically."
+    )
 
 
 if __name__ == "__main__":

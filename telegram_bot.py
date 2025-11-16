@@ -98,6 +98,15 @@ class TelegramTorrentController:
 
     _SELECTION_PREFIX = "pick:"
     _STATUS_CALLBACK = "status"
+    _STATUS_DESC = {
+        "downloading": "actively downloading",
+        "seeding": "completed and seeding",
+        "stopped": "paused or finished",
+        "paused": "paused",
+        "checking": "verifying data",
+        "queued": "waiting in queue",
+        "error": "Transmission reported an error",
+    }
 
     def __init__(
         self,
@@ -134,7 +143,8 @@ class TelegramTorrentController:
     async def handle_status_command(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
             return
-        await self._send_status(update)
+        show_all = self._parse_status_scope(update.message.text if update.message else "")
+        await self._send_status(update, show_all)
 
     async def handle_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not update.message or not update.message.text:
@@ -155,8 +165,9 @@ class TelegramTorrentController:
                 await self._reply(update, "Give me something to search for, e.g. `search dune`.", markdown=True)
                 return
             await self._perform_search(update, query)
-        elif text.lower() == "status":
-            await self._send_status(update)
+        elif text.lower().startswith("status"):
+            show_all = self._parse_status_scope(text)
+            await self._send_status(update, show_all)
         elif text.lower() == "help":
             await self._send_help(update)
         elif text.isdigit():
@@ -179,7 +190,7 @@ class TelegramTorrentController:
             return
 
         if data == self._STATUS_CALLBACK:
-            await self._send_status(update)
+            await self._send_status(update, show_all=False)
             return
 
         if not data.startswith(self._SELECTION_PREFIX):
@@ -292,11 +303,11 @@ class TelegramTorrentController:
         async with self._tracking_lock:
             self._tracked_downloads[tracking_id] = tracked
 
-    async def _send_status(self, update: Update) -> None:
+    async def _send_status(self, update: Update, show_all: bool) -> None:
         await self._reply(update, "Checking Transmission…")
         loop = asyncio.get_running_loop()
         try:
-            statuses = await loop.run_in_executor(None, self._transmission.list_torrents, True)
+            statuses = await loop.run_in_executor(None, self._transmission.list_torrents, not show_all)
         except SystemExit as exc:  # pragma: no cover - defensive
             LOGGER.warning("Transmission status check aborted: %s", exc)
             await self._reply(update, f"Status check failed: {exc}")
@@ -307,13 +318,19 @@ class TelegramTorrentController:
             return
 
         if not statuses:
-            await self._reply(update, "No active torrents in Transmission.")
+            msg = "No active torrents in Transmission." if not show_all else "Transmission has no torrents yet."
+            await self._reply(update, msg)
             return
 
-        lines = ["Active torrents:"]
+        heading = "Active torrents:" if not show_all else "All torrents:"
+        lines = [heading]
         for status in statuses:
             eta = status.eta or "unknown"
-            lines.append(f"- {status.name} — {status.percent_done:.1f}% ({status.status}, ETA: {eta})")
+            state = status.status or "unknown"
+            explanation = ""
+            if show_all:
+                explanation = f" – {self._explain_status(state)}"
+            lines.append(f"- {status.name} — {status.percent_done:.1f}% ({state}{explanation}, ETA: {eta})")
         await self._reply(update, "\n".join(lines))
 
     async def _poll_downloads(self, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -380,6 +397,7 @@ class TelegramTorrentController:
             "- Prefix with `search movies ...`, `search tv ...`, or `search software ...` for category presets.\n"
             "- `<number>` or button tap: pick one of the previously listed torrents to start the download.\n"
             "- `status`: show Transmission's active downloads (inline button available).\n"
+            "- `status all`: list every torrent with a short explanation of its state.\n"
             "- `/help`: show this message again.",
             markdown=True,
         )
@@ -421,6 +439,18 @@ class TelegramTorrentController:
             [[KeyboardButton("status"), KeyboardButton("help")]],
             resize_keyboard=True,
         )
+
+    def _parse_status_scope(self, text: Optional[str]) -> bool:
+        if not text:
+            return False
+        parts = text.strip().split(maxsplit=1)
+        if len(parts) < 2:
+            return False
+        return parts[1].strip().lower() == "all"
+
+    def _explain_status(self, status: str) -> str:
+        key = status.lower()
+        return self._STATUS_DESC.get(key, "status reported by Transmission")
 
     def _is_authorized(self, update: Update) -> bool:
         if not self._allowed_chat_id:
