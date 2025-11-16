@@ -42,10 +42,13 @@ It will:
 
 - detect existing instances before touching anything,
 - optionally write a Docker Compose stack under `~/.local/share/torrent_finder/stack` and spin up linuxserver/jackett + ghcr.io/flaresolverr,
-- link Jackett to FlareSolverr, configure a curated list of public trackers, and grab the Torznab API key,
-- update `config.json` whenever `torznab.url`/`torznab.apikey` are still on placeholder values.
+- link Jackett to FlareSolverr and point you to the local Jackett UI so you can finish configuration manually (add indexers, copy the API key),
+- update `config.json` whenever `torznab.url`/`torznab.apikey` are still on placeholder values after you paste the key.
 
 Pass `--help` to the script for more knobs (custom tracker list, ports, or skipping Docker entirely when you manage the services yourself).
+
+!!! note
+    Jackett does not offer a supported API for retrieving the Torznab key or bulk-importing indexers without user interaction. After running the bootstrap script, visit the printed Jackett URL (typically `http://127.0.0.1:9117`), add at least one indexer (none are auto-installed), and copy the API key into your `config.json`.
 
 ## Verify the installation
 

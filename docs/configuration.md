@@ -59,6 +59,17 @@ The application reads a single JSON document (`config.json` by default) that con
 
 Once configured, the bot accepts `search <title>` requests (including the same `movies`/`tv`/`software` preset keywords used by the CLI), replies with tappable inline buttons for each result, lets you send plain numbers to start downloads, and exposes `status`, `help`, and `/start` shortcuts—handy when you want to drive everything from your phone.
 
+### Obtaining the Telegram credentials
+
+1. Open Telegram and talk to [@BotFather](https://t.me/BotFather).
+2. Run `/newbot`, answer the prompts (name + username), and copy the token BotFather prints (looks like `1234567890:ABC...`). Paste this into `telegram.bot_token` (or set `TELEGRAM_TOKEN`/`--token`).
+3. (Optional) To restrict the bot to a single chat ID:
+   - Start a conversation with the bot (or add it to your group/channel), send `/start`, then run `curl "https://api.telegram.org/bot<token>/getUpdates"` and read the `chat.id` value.
+   - Alternatively DM [@userinfobot](https://t.me/userinfobot) and reuse the `Id` it reports for you/the chat.
+4. Store that numeric value in `telegram.chat_id`.
+
+Leave `chat_id` blank if you want to interact with the bot from any chat during initial setup/testing.
+
 ## Applying overrides
 
 Every command-line flag documented in [Usage](usage.md) maps to a configuration key. CLI overrides are applied after `config.json` is loaded, letting you script temporary tweaks without editing the JSON file.

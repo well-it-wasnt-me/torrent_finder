@@ -74,10 +74,13 @@ python scripts/setup_indexing_stack.py
 What it does:
 - Detects running instances before doing anything destructive.
 - Writes a `docker-compose.yml` (linuxserver/jackett + ghcr.io/flaresolverr) under `~/.local/share/torrent_finder/stack` and brings it up via Docker.
-- Links Jackett to FlareSolverr, imports a handful of public trackers (`1337x`, `torrentgalaxyclone`, `yts`, `eztv`, `nyaasi`, `limetorrents` by default), and surfaces the API key.
-- Updates `config.json` when `torznab.url`/`apikey` are still on the placeholder values.
+- Links Jackett to FlareSolverr and scaffolds the compose stack so you can begin adding trackers (indexers are **not** added automatically).
+- Prints the local Jackett URL so you can finish setup manually—log in, add the indexers you care about, and copy the Torznab API key back into `config.json`. (Jackett does not expose that key via automation.)
+- Updates `config.json` when `torznab.url`/`apikey` are still on the placeholder values once you paste the key.
 
 Use `--help` for overrides (custom ports, tracker list, skipping Docker, or forcing a config update). Docker has to be installed if you want the automatic install; otherwise run with `--no-docker` and the script will only perform the API wiring.
+
+> **After bootstrapping:** open the printed Jackett URL (usually `http://127.0.0.1:9117`), walk through the UI to add one or more indexers (e.g. Jackett → `Add Indexer`), then copy the API key from the Jackett dashboard into `config.json`. This step is manual—Jackett currently offers no supported way to script API-key retrieval or indexer imports without user interaction.
 
 ## Fire It Up
 ```bash
@@ -121,7 +124,7 @@ Flow:
 - Add an optional category word—`search movies dune`, `search tv s04`, `search software mac final cut`, or `search all dune`—to switch Torznab filters without editing the config.
 - It responds with the top five matches (seed/leech counts included).
 - Reply with the list number *or tap the inline button* to push that magnet into Transmission.
-- Send `status` (or tap the button under the results) any time to see active downloads and their progress.
+- Send `status` (or tap the button under the results) any time to see active downloads and their progress; run `status all` when you need every torrent plus a quick explanation of each state (downloading, seeding, stopped, etc.).
 - The bot pings you once a Telegram-triggered download finishes so you can hit play quicker.
 
 The token can also come from the `telegram.bot_token` section in `config.json` (or `TELEGRAM_TOKEN`). Add
@@ -132,10 +135,20 @@ how many options are shown. `/start` drops a tiny reply keyboard with Status/Hel
 - `search <query>` – fetches results; prefix with `movies`, `tv`, `software`, `software mac`, `software win`, or `all` to reuse the presets listed above.
 - `<number>` – selects one of the previous results (inline buttons do the same).
 - `status` – checks Transmission (also available as a dedicated button and inline callback).
+- `status all` – lists every torrent and annotates Transmission’s reported state (downloading, seeding, stopped, queued).
 - `help` / `/help` – shows the condensed cheat-sheet.
 
 > **Heads up:** background status polling uses Python Telegram Bot's JobQueue. Install the optional extra via
 > `pip install "python-telegram-bot[job-queue]"` to enable the completion pings.
+
+### Getting the Telegram token and chat ID
+
+1. DM [@BotFather](https://t.me/BotFather), run `/newbot`, follow the prompts, and copy the API token it prints (looks like `1234567890:ABC...`).
+2. Drop that token into `config.json` under `telegram.bot_token` (or export `TELEGRAM_TOKEN`, or pass `--token` when running the bot).
+3. (Optional) Lock the bot to a single chat: start a conversation with your bot (or add it to the group), send `/start`, then run `curl "https://api.telegram.org/bot<token>/getUpdates"`; copy the `chat.id` shown in the JSON. Alternatively, DM [@userinfobot](https://t.me/userinfobot) and reuse the `Id` it reports.
+4. Store that numeric ID in `telegram.chat_id`.
+
+Skip the chat ID to let the bot respond to any chat during initial testing.
 
 Crank telemetry up with `--telemetry-level DEBUG` (or pass `--torznab-debug`) when you need the raw Jackett
 response previews logged to stdout—handy when a feed returns zero results and you want to know why.

@@ -57,7 +57,7 @@ Flow:
 2. Add an optional category keyword upfront—`search movies dune`, `search tv s04`, `search software mac final cut`, or `search all dune`—to reuse the CLI presets inside Telegram.
 3. The bot replies with the top five ranked results and seed/peer stats.
 4. Respond with the list number or tap the inline button to add that torrent to Transmission.
-5. Send `status` (or tap the Status button shown below each result set) to check active downloads; the bot auto-notifies you when a Telegram-triggered download finishes.
+5. Send `status` (or tap the Status button shown below each result set) to check active downloads; use `status all` when you want every torrent plus a quick read on its Transmission state (downloading, seeding, stopped, etc.). The bot auto-notifies you when a Telegram-triggered download finishes regardless.
 
 Populate the `telegram` section of `config.json` with your `bot_token` (and optional `chat_id`) or override with `--token` / `--chat-id`. Tweak `--max-results` when you want more or fewer options. The bot shares the same `config.json` as the CLI, so keep your Torznab/Transmission settings up to date there.
 
@@ -67,6 +67,7 @@ Kick the conversation off with `/start` to expose a compact reply keyboard that 
 - `search <query>` – runs a search; prepend the category keywords listed above for quick filters.
 - `<number>` or tapping the inline button – sends that specific result to Transmission.
 - `status` – displays active torrents (also exposed via the inline “📡 Status” button).
+- `status all` – lists every torrent and adds a short explanation of each Transmission state.
 - `help` / `/help` – prints the command list again.
 
 !!! tip
