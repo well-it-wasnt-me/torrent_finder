@@ -27,8 +27,8 @@ class TorrentFinderTests(unittest.TestCase):
         mock_client = MagicMock()
         mock_client.search.return_value = [Candidate(magnet="magnet:one")]
         finder = TorrentFinder(mock_client)
-        result = finder.find_candidates("test", debug=True)
-        mock_client.search.assert_called_once_with("test", debug=True)
+        result = finder.find_candidates("test", categories="2000", debug=True)
+        mock_client.search.assert_called_once_with("test", categories="2000", debug=True)
         self.assertEqual(result[0].magnet, "magnet:one")
 
 

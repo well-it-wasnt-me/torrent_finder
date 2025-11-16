@@ -11,8 +11,9 @@ straight to Transmission.
 
 import argparse
 import logging
-from typing import Any
+from typing import Any, Optional
 
+from torrent_finder.categories import available_presets, categories_for_preset, describe_preset
 from torrent_finder.config import AppConfig, ConfigError, ConfigLoader
 from torrent_finder.finder import TorrentFinder
 from torrent_finder.torznab import TorznabClient
@@ -61,6 +62,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--password", help="Transmission password (RPC).")
     parser.add_argument("--auth", help="transmission-remote auth user:pass (remote mode).")
     parser.add_argument("--categories", help="Override Torznab categories for this run.")
+    parser.add_argument(
+        "--category",
+        choices=available_presets(),
+        help="Quick category preset (movies, tv, software, software-mac, software-win, all).",
+    )
 
     parser.add_argument("--debug", action="store_true", help="Enable debug logging regardless of config.")
     return parser.parse_args()
@@ -83,7 +89,7 @@ def configure_logging(config: AppConfig, debug: bool) -> None:
     logging.basicConfig(level=level, format="%(levelname)s: %(message)s")
 
 
-def collect_overrides(args: argparse.Namespace) -> dict[str, Any]:
+def collect_overrides(args: argparse.Namespace, preset_categories: Optional[str]) -> dict[str, Any]:
     """
     Gather CLI overrides into a single place.
 
@@ -98,6 +104,10 @@ def collect_overrides(args: argparse.Namespace) -> dict[str, Any]:
         A mapping of override keys to values, ready for the config mixer.
     """
 
+    categories_value = args.categories
+    if preset_categories is not None:
+        categories_value = preset_categories
+
     return {
         "download_dir": args.download_dir,
         "start": args.start,
@@ -107,7 +117,7 @@ def collect_overrides(args: argparse.Namespace) -> dict[str, Any]:
         "username": args.username,
         "password": args.password,
         "auth": args.auth,
-        "categories": args.categories,
+        "categories": categories_value,
     }
 
 
@@ -130,10 +140,20 @@ def main() -> None:
     except ConfigError as exc:
         raise SystemExit(str(exc)) from exc
 
-    overrides = collect_overrides(args)
+    if args.category and args.categories:
+        raise SystemExit("Choose either --category or --categories, not both.")
+
+    preset_categories = None
+    if args.category:
+        preset_categories = categories_for_preset(args.category)
+
+    overrides = collect_overrides(args, preset_categories)
     config = ConfigLoader.apply_overrides(config, overrides)
 
     configure_logging(config, args.debug)
+
+    if args.category:
+        logging.info("Category preset: %s", describe_preset(args.category))
 
     logging.info("Searching Torznab for: %s", args.title)
     torznab_client = TorznabClient(config.torznab)

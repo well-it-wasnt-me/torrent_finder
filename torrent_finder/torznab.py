@@ -102,7 +102,7 @@ class TorznabClient:
             self._session_local.session = session
         return session
 
-    def search(self, title: str, debug: bool = False) -> List[Candidate]:
+    def search(self, title: str, categories: Optional[str] = None, debug: bool = False) -> List[Candidate]:
         """
         Query Torznab for candidates that match ``title``.
 
@@ -119,7 +119,7 @@ class TorznabClient:
             Candidates that survived parsing and filtering.
         """
 
-        params = self._build_params(title)
+        params = self._build_params(title, categories)
 
         session = self._get_session()
 
@@ -168,7 +168,7 @@ class TorznabClient:
 
         return candidates
 
-    def _build_params(self, query: str) -> dict[str, str]:
+    def _build_params(self, query: str, categories_override: Optional[str]) -> dict[str, str]:
         """
         Build the Torznab parameter payload for both classic and v2.0 endpoints.
 
@@ -193,9 +193,13 @@ class TorznabClient:
         params["Query"] = query
         params["Title"] = query
 
-        if self.config.categories:
-            params["cat"] = self.config.categories
-            categories = [item.strip() for item in self.config.categories.split(",") if item.strip()]
+        categories_value = categories_override
+        if categories_value is None:
+            categories_value = self.config.categories
+
+        if categories_value:
+            params["cat"] = categories_value
+            categories = [item.strip() for item in categories_value.split(",") if item.strip()]
             for idx, cat in enumerate(categories):
                 params[f"Category[{idx}]"] = cat
 

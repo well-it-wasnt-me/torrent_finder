@@ -23,9 +23,18 @@ import uuid
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
-from telegram import Update
-from telegram.ext import Application, ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, Update
+from telegram.ext import (
+    Application,
+    ApplicationBuilder,
+    CallbackQueryHandler,
+    CommandHandler,
+    ContextTypes,
+    MessageHandler,
+    filters,
+)
 
+from torrent_finder.categories import describe_preset, extract_preset_from_query
 from torrent_finder.config import AppConfig, ConfigLoader, ConfigError
 from torrent_finder.finder import TorrentFinder
 from torrent_finder.transmission import TransmissionController
@@ -87,6 +96,9 @@ class TrackedDownload:
 class TelegramTorrentController:
     """Bridges Telegram updates to TorrentFinder and Transmission."""
 
+    _SELECTION_PREFIX = "pick:"
+    _STATUS_CALLBACK = "status"
+
     def __init__(
         self,
         finder: TorrentFinder,
@@ -109,22 +121,15 @@ class TelegramTorrentController:
             return
         await self._reply(
             update,
-            "Send `search <title>` to see the top torrents, `status` to inspect active downloads, then respond with the number to download.",
+            "Send `search <title>` to see the top torrents, tap *Status* to inspect downloads, then press a number or button to start the transfer.",
             markdown=True,
+            reply_markup=self._build_shortcuts_keyboard(),
         )
 
     async def handle_help(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
             return
-        await self._reply(
-            update,
-            "Commands:\n"
-            "- `search <title>`: look up torrents and see the top matches.\n"
-            "- `<number>`: pick one of the previously listed torrents to start the download.\n"
-            "- `status`: show Transmission's active downloads.\n"
-            "- `/help`: show this message again.",
-            markdown=True,
-        )
+        await self._send_help(update)
 
     async def handle_status_command(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
@@ -152,6 +157,8 @@ class TelegramTorrentController:
             await self._perform_search(update, query)
         elif text.lower() == "status":
             await self._send_status(update)
+        elif text.lower() == "help":
+            await self._send_help(update)
         elif text.isdigit():
             await self._handle_selection(update, chat_id, int(text))
         else:
@@ -160,11 +167,61 @@ class TelegramTorrentController:
                 "Say `search <title>` to look for something, `status` to inspect active torrents, or send a number to pick from the last list.",
             )
 
+    async def handle_candidate_button(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+        query = update.callback_query
+        if not query or not query.data:
+            return
+
+        data = query.data
+        await query.answer()
+
+        if not self._is_authorized(update):
+            return
+
+        if data == self._STATUS_CALLBACK:
+            await self._send_status(update)
+            return
+
+        if not data.startswith(self._SELECTION_PREFIX):
+            LOGGER.debug("Ignoring unknown callback payload: %s", data)
+            return
+
+        try:
+            selection = int(data[len(self._SELECTION_PREFIX) :])
+        except ValueError:
+            LOGGER.warning("Bad selection index from Telegram callback: %s", data)
+            return
+
+        message = query.message
+        chat_id = message.chat_id if message else (update.effective_chat.id if update.effective_chat else None)
+        if not chat_id:
+            LOGGER.debug("Callback without chat ID.")
+            return
+
+        if message:
+            try:
+                await message.edit_reply_markup(reply_markup=None)
+            except Exception:  # pragma: no cover - best effort cleanup
+                LOGGER.debug("Could not clear inline keyboard for message %s", message.message_id)
+
+        await self._handle_selection(update, chat_id, selection)
+
     async def _perform_search(self, update: Update, query: str) -> None:
-        await self._reply(update, f"Searching for “{query}”…")
+        categories, trimmed_query, preset_slug = extract_preset_from_query(query)
+        if not trimmed_query:
+            await self._reply(update, "Give me something to search for after the category keyword.", markdown=False)
+            return
+
+        await self._reply(update, self._format_search_prompt(trimmed_query, preset_slug))
         loop = asyncio.get_running_loop()
         try:
-            candidates = await loop.run_in_executor(None, self._finder.find_candidates, query, self._torznab_debug)
+            candidates = await loop.run_in_executor(
+                None,
+                self._finder.find_candidates,
+                trimmed_query,
+                categories,
+                self._torznab_debug,
+            )
         except Exception as exc:  # pragma: no cover - defensive, Finder already logs
             LOGGER.exception("Torznab search failed")
             await self._reply(update, f"Search failed: {exc}")
@@ -176,16 +233,25 @@ class TelegramTorrentController:
             return
 
         chat_id = update.effective_chat.id if update.effective_chat else 0
-        self._pending[chat_id] = PendingSearch(query=query, candidates=ranked)
+        self._pending[chat_id] = PendingSearch(query=trimmed_query, candidates=ranked)
 
-        lines = [f"Top {len(ranked)} results for *{query}*:"]
+        filter_suffix = ""
+        if preset_slug and preset_slug != "all":
+            filter_suffix = f" ({describe_preset(preset_slug)})"
+
+        lines = [f"Top {len(ranked)} results for *{trimmed_query}*{filter_suffix}:"]
         for idx, candidate in enumerate(ranked, start=1):
             title = candidate.title or "(untitled)"
             seeders = candidate.seeders if candidate.seeders is not None else "?"
             leechers = candidate.leechers if candidate.leechers is not None else "?"
             lines.append(f"{idx}. {title} — seeders: {seeders} | leechers: {leechers}")
         lines.append("Reply with the number to send it to Transmission.")
-        await self._reply(update, "\n".join(lines), markdown=True)
+        await self._reply(
+            update,
+            "\n".join(lines),
+            markdown=True,
+            reply_markup=self._build_results_keyboard(len(ranked)),
+        )
 
     async def _handle_selection(self, update: Update, chat_id: int, selection: int) -> None:
         pending = self._pending.get(chat_id)
@@ -306,12 +372,55 @@ class TelegramTorrentController:
             name="torrent-download-monitor",
         )
 
-    @staticmethod
-    async def _reply(update: Update, text: str, markdown: bool = False) -> None:
-        if not update.message:
+    async def _send_help(self, update: Update) -> None:
+        await self._reply(
+            update,
+            "Commands:\n"
+            "- `search <title>`: look up torrents and see the top matches.\n"
+            "- Prefix with `search movies ...`, `search tv ...`, or `search software ...` for category presets.\n"
+            "- `<number>` or button tap: pick one of the previously listed torrents to start the download.\n"
+            "- `status`: show Transmission's active downloads (inline button available).\n"
+            "- `/help`: show this message again.",
+            markdown=True,
+        )
+
+    async def _reply(self, update: Update, text: str, markdown: bool = False, reply_markup=None) -> None:
+        message = update.message
+        if not message and update.callback_query:
+            message = update.callback_query.message
+        if not message:
             return
         parse_mode = "Markdown" if markdown else None
-        await update.message.reply_text(text, parse_mode=parse_mode)
+        await message.reply_text(text, parse_mode=parse_mode, reply_markup=reply_markup)
+
+    @staticmethod
+    def _format_search_prompt(query: str, preset_slug: Optional[str]) -> str:
+        if preset_slug == "all":
+            return f"Searching all categories for “{query}”…"
+        if preset_slug:
+            return f"Searching {describe_preset(preset_slug)} for “{query}”…"
+        return f"Searching for “{query}”…"
+
+    @classmethod
+    def _build_results_keyboard(cls, count: int) -> InlineKeyboardMarkup:
+        buttons: List[List[InlineKeyboardButton]] = []
+        row: List[InlineKeyboardButton] = []
+        for idx in range(1, count + 1):
+            row.append(InlineKeyboardButton(str(idx), callback_data=f"{cls._SELECTION_PREFIX}{idx}"))
+            if len(row) == 3:
+                buttons.append(row)
+                row = []
+        if row:
+            buttons.append(row)
+        buttons.append([InlineKeyboardButton("📡 Status", callback_data=cls._STATUS_CALLBACK)])
+        return InlineKeyboardMarkup(buttons)
+
+    @staticmethod
+    def _build_shortcuts_keyboard() -> ReplyKeyboardMarkup:
+        return ReplyKeyboardMarkup(
+            [[KeyboardButton("status"), KeyboardButton("help")]],
+            resize_keyboard=True,
+        )
 
     def _is_authorized(self, update: Update) -> bool:
         if not self._allowed_chat_id:
@@ -345,6 +454,7 @@ def build_app(
     application.add_handler(CommandHandler("start", controller.handle_start))
     application.add_handler(CommandHandler("help", controller.handle_help))
     application.add_handler(CommandHandler("status", controller.handle_status_command))
+    application.add_handler(CallbackQueryHandler(controller.handle_candidate_button))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, controller.handle_text))
     controller.enable_background_tasks(application)
     return application

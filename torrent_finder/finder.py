@@ -26,7 +26,7 @@ class TorrentFinder:
 
         self._torznab = torznab_client
 
-    def find_candidates(self, title: str, debug: bool = False) -> List[Candidate]:
+    def find_candidates(self, title: str, categories: Optional[str] = None, debug: bool = False) -> List[Candidate]:
         """
         Pull a fresh list of matching torrents.
 
@@ -34,6 +34,9 @@ class TorrentFinder:
         ----------
         title : str
             Search term supplied by the user.
+        categories : str | None, optional
+            Torznab category filter override (comma-delimited string). ``None``
+            falls back to the global config.
         debug : bool, optional
             Enable verbose Torznab logging, default is ``False``.
 
@@ -43,7 +46,7 @@ class TorrentFinder:
             All candidate torrents the indexer coughed up.
         """
 
-        candidates = self._torznab.search(title, debug=debug)
+        candidates = self._torznab.search(title, categories=categories, debug=debug)
         logging.debug("Finder received %d candidates", len(candidates))
         return candidates
 
