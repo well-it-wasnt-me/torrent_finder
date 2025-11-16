@@ -2,6 +2,25 @@
 
 <!-- version list -->
 
+## v1.4.0 (2025-11-16)
+
+### Documentation
+
+- Update
+  ([`56fb5fe`](https://github.com/well-it-wasnt-me/torrent_finder/commit/56fb5feef27869d9a75e542afe17521bb27d3ffc))
+
+- Updating doc
+  ([`fddb07b`](https://github.com/well-it-wasnt-me/torrent_finder/commit/fddb07bdb86118ea431468c0c1b626a1f2ac7d67))
+
+### Features
+
+- Category implementation
+  ([`4646aae`](https://github.com/well-it-wasnt-me/torrent_finder/commit/4646aae5bf825c6118a24c68a4cea8dc1463431b))
+
+- Minor improvements
+  ([`1e17bef`](https://github.com/well-it-wasnt-me/torrent_finder/commit/1e17bef2f4e928271fb3d33868a89e2c614d0bf4))
+
+
 ## v1.3.6 (2025-10-26)
 
 
