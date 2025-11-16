@@ -53,6 +53,10 @@
     <li class="toctree-l2"><a class="reference internal" href="#basic-search">Basic search</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command-line options</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#category-presets-cheat-sheet">Category presets cheat sheet</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#workflow-tips">Workflow tips</a>
     </li>
@@ -109,8 +113,52 @@
 <li><code>--username, --password</code>: credentials for Transmission RPC mode.</li>
 <li><code>--auth</code>: <code>user:pass</code> combination for the <code>transmission-remote</code> CLI.</li>
 <li><code>--categories</code>: replace the Torznab category filter for this run (comma-separated list).</li>
+<li><code>--category</code>: friendly presets for common filters (<code>movies</code>, <code>tv</code>, <code>software</code>, <code>software-mac</code>, <code>software-win</code>, <code>all</code>).</li>
 <li><code>--debug</code>: elevate logging to <code>DEBUG</code> regardless of the configuration.</li>
 </ul>
+<h3 id="category-presets-cheat-sheet">Category presets cheat sheet<a class="headerlink" href="#category-presets-cheat-sheet" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Torznab IDs</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>movies</code></td>
+<td><code>2000</code></td>
+<td><code>python main.py "Dune" --category movies</code></td>
+</tr>
+<tr>
+<td><code>tv</code></td>
+<td><code>5000</code></td>
+<td><code>python main.py "The Bear" --category tv</code></td>
+</tr>
+<tr>
+<td><code>software</code></td>
+<td><code>4000</code></td>
+<td><code>python main.py "Blender" --category software</code></td>
+</tr>
+<tr>
+<td><code>software-mac</code></td>
+<td><code>4050</code></td>
+<td><code>python main.py "Final Cut" --category software-mac</code></td>
+</tr>
+<tr>
+<td><code>software-win</code></td>
+<td><code>4010,4020</code></td>
+<td><code>python main.py "Office" --category software-win</code></td>
+</tr>
+<tr>
+<td><code>all</code></td>
+<td><em>(no filter)</em></td>
+<td><code>python main.py "Dune" --category all</code></td>
+</tr>
+</tbody>
+</table>
+<p>The presets simply override <code>torznab.categories</code>, so existing config values stay untouched for subsequent runs.</p>
 <h2 id="workflow-tips">Workflow tips<a class="headerlink" href="#workflow-tips" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Use the overrides to script batch downloads without touching <code>config.json</code>.</li>
@@ -124,11 +172,18 @@
 <p>Flow:</p>
 <ol>
 <li>Send <code>search Cowboy Bepop</code> (or any <code>search &lt;keywords&gt;</code> query).</li>
+<li>Add an optional category keyword upfront—<code>search movies dune</code>, <code>search tv s04</code>, <code>search software mac final cut</code>, or <code>search all dune</code>—to reuse the CLI presets inside Telegram.</li>
 <li>The bot replies with the top five ranked results and seed/peer stats.</li>
-<li>Respond with the list number to add that torrent to Transmission.</li>
-<li>Send <code>status</code> to check in on active downloads; the bot auto-notifies you when a Telegram-triggered download finishes.</li>
+<li>Respond with the list number or tap the inline button to add that torrent to Transmission.</li>
+<li>Send <code>status</code> (or tap the Status button shown below each result set) to check active downloads; the bot auto-notifies you when a Telegram-triggered download finishes.</li>
 </ol>
 <p>Populate the <code>telegram</code> section of <code>config.json</code> with your <code>bot_token</code> (and optional <code>chat_id</code>) or override with <code>--token</code> / <code>--chat-id</code>. Tweak <code>--max-results</code> when you want more or fewer options. The bot shares the same <code>config.json</code> as the CLI, so keep your Torznab/Transmission settings up to date there.</p>
+<p>Kick the conversation off with <code>/start</code> to expose a compact reply keyboard that keeps Status/Help buttons handy for tap-friendly control.</p>
+<p><strong>Commands recap</strong>
+- <code>search &lt;query&gt;</code> – runs a search; prepend the category keywords listed above for quick filters.
+- <code>&lt;number&gt;</code> or tapping the inline button – sends that specific result to Transmission.
+- <code>status</code> – displays active torrents (also exposed via the inline “📡 Status” button).
+- <code>help</code> / <code>/help</code> – prints the command list again.</p>
 <p>!!! tip
     Auto-notifications for finished torrents rely on the Telegram JobQueue. Install the optional dependency via <code>pip install "python-telegram-bot[job-queue]"</code> so the bot can schedule those background checks.</p>
 <p>Need to troubleshoot Jackett responses? Run with <code>--telemetry-level DEBUG</code> or pass the dedicated
