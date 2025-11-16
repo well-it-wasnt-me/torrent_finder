@@ -21,7 +21,21 @@ The command above loads `config.json` from the project root, queries the configu
 - `--username, --password`: credentials for Transmission RPC mode.
 - `--auth`: `user:pass` combination for the `transmission-remote` CLI.
 - `--categories`: replace the Torznab category filter for this run (comma-separated list).
+- `--category`: friendly presets for common filters (`movies`, `tv`, `software`, `software-mac`, `software-win`, `all`).
 - `--debug`: elevate logging to `DEBUG` regardless of the configuration.
+
+### Category presets cheat sheet
+
+| Preset | Torznab IDs | Example |
+| ------ | ----------- | ------- |
+| `movies` | `2000` | `python main.py "Dune" --category movies` |
+| `tv` | `5000` | `python main.py "The Bear" --category tv` |
+| `software` | `4000` | `python main.py "Blender" --category software` |
+| `software-mac` | `4050` | `python main.py "Final Cut" --category software-mac` |
+| `software-win` | `4010,4020` | `python main.py "Office" --category software-win` |
+| `all` | *(no filter)* | `python main.py "Dune" --category all` |
+
+The presets simply override `torznab.categories`, so existing config values stay untouched for subsequent runs.
 
 ## Workflow tips
 
@@ -40,11 +54,20 @@ python telegram_bot.py --config config.json
 Flow:
 
 1. Send `search Cowboy Bepop` (or any `search <keywords>` query).
-2. The bot replies with the top five ranked results and seed/peer stats.
-3. Respond with the list number to add that torrent to Transmission.
-4. Send `status` to check in on active downloads; the bot auto-notifies you when a Telegram-triggered download finishes.
+2. Add an optional category keyword upfront—`search movies dune`, `search tv s04`, `search software mac final cut`, or `search all dune`—to reuse the CLI presets inside Telegram.
+3. The bot replies with the top five ranked results and seed/peer stats.
+4. Respond with the list number or tap the inline button to add that torrent to Transmission.
+5. Send `status` (or tap the Status button shown below each result set) to check active downloads; the bot auto-notifies you when a Telegram-triggered download finishes.
 
 Populate the `telegram` section of `config.json` with your `bot_token` (and optional `chat_id`) or override with `--token` / `--chat-id`. Tweak `--max-results` when you want more or fewer options. The bot shares the same `config.json` as the CLI, so keep your Torznab/Transmission settings up to date there.
+
+Kick the conversation off with `/start` to expose a compact reply keyboard that keeps Status/Help buttons handy for tap-friendly control.
+
+**Commands recap**
+- `search <query>` – runs a search; prepend the category keywords listed above for quick filters.
+- `<number>` or tapping the inline button – sends that specific result to Transmission.
+- `status` – displays active torrents (also exposed via the inline “📡 Status” button).
+- `help` / `/help` – prints the command list again.
 
 !!! tip
     Auto-notifications for finished torrents rely on the Telegram JobQueue. Install the optional dependency via `pip install "python-telegram-bot[job-queue]"` so the bot can schedule those background checks.

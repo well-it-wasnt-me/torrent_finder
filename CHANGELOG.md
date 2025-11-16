@@ -44,6 +44,7 @@
 
 - Telegram bot can report Transmission's active downloads with `status` and pings chats when Telegram-triggered torrents finish.
 - Added Black configuration/dev requirements to keep formatting consistent.
+- Torznab category presets (movies, tv, software/mac/win, all) added to the CLI plus matching `search movies ...` keywords inside the Telegram bot, along with inline selection buttons.
 
 ## v1.2.1 (2025-10-25)
 

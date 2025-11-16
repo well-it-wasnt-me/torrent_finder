@@ -50,7 +50,7 @@ yes, the defaults are just suggestions:
 
 **Highlights**:
 - `torznab.url` and `torznab.apikey` are the secret handshake to your indexers. No handshake, no magnets.
-- `torznab.categories` keeps the noise down. Comma-separated, like a grocery list, minus the kale.
+- `torznab.categories` keeps the noise down. Comma-separated, like a grocery list, minus the kale—and now you can pass `--category movies|tv|software|software-mac|software-win|all` for the common presets without remembering IDs.
 - `transmission.start` decides if Transmission hits the gas or waits politely in park.
 - `logging.level` understands "DEBUG", "INFO", "WARNING", and "ERROR". No, "LOUD" is not an option.
 - Add a `telegram` section when you want the chat bot to pick up credentials:
@@ -91,8 +91,22 @@ python main.py "Nature Documentary" \
   --start \
   --username transmission \
   --password secret \
-  --categories "2000,5000"
+  --category movies
 ```
+Prefer raw Torznab IDs? Keep `--categories "2000,5000"` around for custom combos—the presets just save you from memorizing them.
+
+### Category presets
+
+| Preset        | Under the hood      | Sample CLI usage                          | Telegram equivalent                     |
+|---------------|---------------------|-------------------------------------------|-----------------------------------------|
+| `movies`      | `2000`              | `--category movies`                       | `search movies dune`                    |
+| `tv`          | `5000`              | `--category tv`                           | `search tv the bear`                    |
+| `software`    | `4000`              | `--category software`                     | `search software blender`               |
+| `software-mac`| `4050`              | `--category software-mac`                 | `search software mac final cut`         |
+| `software-win`| `4010,4020`         | `--category software-win`                 | `search software win office`            |
+| `all`         | no filter           | `--category all`                          | `search all dune`                       |
+
+The presets piggyback on top of `torznab.categories`, so they work without touching `config.json`. Mix and match with the usual overrides to script one-off runs.
 
 ## Telegram Chat Control
 Want to drive searches from your phone? Spin up the Telegram bot:
@@ -104,14 +118,21 @@ python telegram_bot.py --token "<bot api token>" --config config.json
 
 Flow:
 - Send `search the movie title` to the bot.
+- Add an optional category word—`search movies dune`, `search tv s04`, `search software mac final cut`, or `search all dune`—to switch Torznab filters without editing the config.
 - It responds with the top five matches (seed/leech counts included).
-- Reply with the list number to push that magnet into Transmission.
-- Send `status` any time to see active downloads and their progress.
+- Reply with the list number *or tap the inline button* to push that magnet into Transmission.
+- Send `status` (or tap the button under the results) any time to see active downloads and their progress.
 - The bot pings you once a Telegram-triggered download finishes so you can hit play quicker.
 
 The token can also come from the `telegram.bot_token` section in `config.json` (or `TELEGRAM_TOKEN`). Add
 `telegram.chat_id` if you want to lock the bot to a single chat/channel. Use `--max-results` to tweak
-how many options are shown.
+how many options are shown. `/start` drops a tiny reply keyboard with Status/Help shortcuts so you can keep tapping instead of typing.
+
+**Quick commands**
+- `search <query>` – fetches results; prefix with `movies`, `tv`, `software`, `software mac`, `software win`, or `all` to reuse the presets listed above.
+- `<number>` – selects one of the previous results (inline buttons do the same).
+- `status` – checks Transmission (also available as a dedicated button and inline callback).
+- `help` / `/help` – shows the condensed cheat-sheet.
 
 > **Heads up:** background status polling uses Python Telegram Bot's JobQueue. Install the optional extra via
 > `pip install "python-telegram-bot[job-queue]"` to enable the completion pings.

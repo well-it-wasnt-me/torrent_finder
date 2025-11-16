@@ -16,7 +16,7 @@ simple configuration, readable logging, and a workflow that you can script or in
 python main.py "The Big Lebowski" \
   --config config.json \
   --start \
-  --categories "2000,5000"
+  --category movies
 ```
 
 ## What you'll find here

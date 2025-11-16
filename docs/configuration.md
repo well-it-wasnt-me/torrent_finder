@@ -34,7 +34,7 @@ The application reads a single JSON document (`config.json` by default) that con
 
 - `url`: Base Torznab/Jackett endpoint (required).
 - `apikey`: API key for the feed (required).
-- `categories`: optional comma-separated category identifiers to filter search results.
+- `categories`: optional comma-separated category identifiers to filter search results. Use the CLI shortcut `--category movies|tv|software|software-mac|software-win|all` (or issue `search movies <title>` inside Telegram) when you prefer named presets over raw IDs.
 - `user_agent`: custom HTTP `User-Agent` string. Defaults to `Mozilla/5.0 (compatible; MagnetFinder/torznab-only 1.0)`.
 - `request_timeout`: timeout in seconds for Torznab requests (float, default `12.0`).
 - `sleep_between_requests`: delay in seconds between requests to avoid hammering the indexer (float, default `0.6`).
@@ -56,6 +56,8 @@ The application reads a single JSON document (`config.json` by default) that con
 
 - `bot_token`: Telegram bot token obtained from BotFather. Required when this section is present and enables the chat controller.
 - `chat_id`: optional numeric chat ID. When provided, only that chat (or channel) may send commands to the bot. Leave it empty to accept messages from any chat that knows the bot’s username.
+
+Once configured, the bot accepts `search <title>` requests (including the same `movies`/`tv`/`software` preset keywords used by the CLI), replies with tappable inline buttons for each result, lets you send plain numbers to start downloads, and exposes `status`, `help`, and `/start` shortcuts—handy when you want to drive everything from your phone.
 
 ## Applying overrides
 
