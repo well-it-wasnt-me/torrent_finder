@@ -63,6 +63,10 @@
     <li class="toctree-l2"><a class="reference internal" href="#logging-section">Logging section</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#telegram-section">Telegram section</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#obtaining-the-telegram-credentials">Obtaining the Telegram credentials</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#applying-overrides">Applying overrides</a>
     </li>
@@ -151,6 +155,16 @@
 <li><code>chat_id</code>: optional numeric chat ID. When provided, only that chat (or channel) may send commands to the bot. Leave it empty to accept messages from any chat that knows the bot’s username.</li>
 </ul>
 <p>Once configured, the bot accepts <code>search &lt;title&gt;</code> requests (including the same <code>movies</code>/<code>tv</code>/<code>software</code> preset keywords used by the CLI), replies with tappable inline buttons for each result, lets you send plain numbers to start downloads, and exposes <code>status</code>, <code>help</code>, and <code>/start</code> shortcuts—handy when you want to drive everything from your phone.</p>
+<h3 id="obtaining-the-telegram-credentials">Obtaining the Telegram credentials<a class="headerlink" href="#obtaining-the-telegram-credentials" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Open Telegram and talk to <a href="https://t.me/BotFather">@BotFather</a>.</li>
+<li>Run <code>/newbot</code>, answer the prompts (name + username), and copy the token BotFather prints (looks like <code>1234567890:ABC...</code>). Paste this into <code>telegram.bot_token</code> (or set <code>TELEGRAM_TOKEN</code>/<code>--token</code>).</li>
+<li>(Optional) To restrict the bot to a single chat ID:</li>
+<li>Start a conversation with the bot (or add it to your group/channel), send <code>/start</code>, then run <code>curl "https://api.telegram.org/bot&lt;token&gt;/getUpdates"</code> and read the <code>chat.id</code> value.</li>
+<li>Alternatively DM <a href="https://t.me/userinfobot">@userinfobot</a> and reuse the <code>Id</code> it reports for you/the chat.</li>
+<li>Store that numeric value in <code>telegram.chat_id</code>.</li>
+</ol>
+<p>Leave <code>chat_id</code> blank if you want to interact with the bot from any chat during initial setup/testing.</p>
 <h2 id="applying-overrides">Applying overrides<a class="headerlink" href="#applying-overrides" title="Permanent link">&para;</a></h2>
 <p>Every command-line flag documented in <a href="../usage/">Usage</a> maps to a configuration key. CLI overrides are applied after <code>config.json</code> is loaded, letting you script temporary tweaks without editing the JSON file.</p>
               

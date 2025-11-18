@@ -124,10 +124,12 @@ pip install -r requirements.txt
 <ul>
 <li>detect existing instances before touching anything,</li>
 <li>optionally write a Docker Compose stack under <code>~/.local/share/torrent_finder/stack</code> and spin up linuxserver/jackett + ghcr.io/flaresolverr,</li>
-<li>link Jackett to FlareSolverr, configure a curated list of public trackers, and grab the Torznab API key,</li>
-<li>update <code>config.json</code> whenever <code>torznab.url</code>/<code>torznab.apikey</code> are still on placeholder values.</li>
+<li>link Jackett to FlareSolverr and point you to the local Jackett UI so you can finish configuration manually (add indexers, copy the API key),</li>
+<li>update <code>config.json</code> whenever <code>torznab.url</code>/<code>torznab.apikey</code> are still on placeholder values after you paste the key.</li>
 </ul>
 <p>Pass <code>--help</code> to the script for more knobs (custom tracker list, ports, or skipping Docker entirely when you manage the services yourself).</p>
+<p>!!! note
+    Jackett does not offer a supported API for retrieving the Torznab key or bulk-importing indexers without user interaction. After running the bootstrap script, visit the printed Jackett URL (typically <code>http://127.0.0.1:9117</code>), add at least one indexer (none are auto-installed), and copy the API key into your <code>config.json</code>.</p>
 <h2 id="verify-the-installation">Verify the installation<a class="headerlink" href="#verify-the-installation" title="Permanent link">&para;</a></h2>
 <p>Run the unit tests to confirm the environment is wired correctly.</p>
 <pre><code class="language-bash">pytest
