@@ -21,7 +21,9 @@ import logging
 import os
 import uuid
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
+from functools import partial
+from types import SimpleNamespace
+from typing import Awaitable, Callable, Dict, List, Optional, Tuple
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, Update
 from telegram.ext import (
@@ -126,6 +128,8 @@ class TelegramTorrentController:
         self._tracked_downloads: Dict[str, TrackedDownload] = {}
         self._tracking_lock = asyncio.Lock()
         self._pending_download_choice: Dict[int, Candidate] = {}
+        self._fallback_poll_task: Optional[asyncio.Task] = None
+        self._stop_fallback_event: Optional[asyncio.Event] = None
         self._download_dir_options: List[Tuple[str, str]] = [
             ("Movies (default)", "/var/lib/transmission-daemon/downloads/movies"),
             ("TV Show", "/var/lib/transmission-daemon/downloads/tv_show"),
@@ -448,8 +452,21 @@ class TelegramTorrentController:
         return None
 
     def enable_background_tasks(self, application: Application, interval_seconds: int = 30) -> None:
-        job_queue = getattr(application, "_job_queue", None)
+        job_queue = getattr(application, "job_queue", None)
         if not job_queue:
+            LOGGER.warning(
+                "Telegram JobQueue not available; falling back to asyncio polling every %ss. "
+                "Install python-telegram-bot[job-queue] for native scheduling.",
+                interval_seconds,
+            )
+            application.post_init = self._chain_lifecycle_callback(
+                application.post_init,
+                partial(self._start_fallback_polling, interval_seconds=interval_seconds),
+            )
+            application.post_shutdown = self._chain_lifecycle_callback(
+                application.post_shutdown,
+                self._stop_fallback_polling,
+            )
             return
         job_queue.run_repeating(
             self._poll_downloads,
@@ -457,6 +474,48 @@ class TelegramTorrentController:
             first=interval_seconds,
             name="torrent-download-monitor",
         )
+
+    async def _start_fallback_polling(self, application: Application, interval_seconds: int) -> None:
+        if self._fallback_poll_task:
+            return
+        self._stop_fallback_event = asyncio.Event()
+        self._fallback_poll_task = asyncio.create_task(self._fallback_poll_loop(application, interval_seconds))
+
+    async def _stop_fallback_polling(self, application: Application) -> None:  # noqa: ARG002
+        if not self._fallback_poll_task or not self._stop_fallback_event:
+            return
+        self._stop_fallback_event.set()
+        await self._fallback_poll_task
+        self._fallback_poll_task = None
+        self._stop_fallback_event = None
+
+    async def _fallback_poll_loop(self, application: Application, interval_seconds: int) -> None:
+        """
+        Poll Transmission on a plain asyncio loop when JobQueue is unavailable.
+        """
+
+        await asyncio.sleep(interval_seconds)
+        context = SimpleNamespace(bot=application.bot)
+        while self._stop_fallback_event and not self._stop_fallback_event.is_set():
+            try:
+                await self._poll_downloads(context)
+            except Exception:  # pragma: no cover - defensive, to keep the loop alive
+                LOGGER.warning("Fallback polling cycle failed", exc_info=True)
+            await asyncio.sleep(interval_seconds)
+
+    @staticmethod
+    def _chain_lifecycle_callback(
+        existing: Optional[Callable[[Application], Awaitable[None]]],
+        new_callback: Callable[[Application], Awaitable[None]],
+    ) -> Callable[[Application], Awaitable[None]]:
+        if existing is None:
+            return new_callback
+
+        async def combined(application: Application) -> None:
+            await existing(application)
+            await new_callback(application)
+
+        return combined
 
     async def _send_help(self, update: Update) -> None:
         await self._reply(

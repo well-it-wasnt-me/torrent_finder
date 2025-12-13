@@ -6,3 +6,4 @@ cloudscraper
 pytest
 python-telegram-bot>=20.6
 mkdocs>=1.5
+python-telegram-bot[job-queue]
