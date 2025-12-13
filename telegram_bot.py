@@ -103,6 +103,7 @@ class TelegramTorrentController:
     _SELECTION_PREFIX = "pick:"
     _DIR_SELECTION_PREFIX = "dir:"
     _STATUS_CALLBACK = "status"
+    _HELP_KEYBOARD_CALLBACK = "help-keyboard"
     _STATUS_DESC = {
         "downloading": "actively downloading",
         "seeding": "completed and seeding",
@@ -201,6 +202,13 @@ class TelegramTorrentController:
 
         if data == self._STATUS_CALLBACK:
             await self._send_status(update)
+            return
+        if data == self._HELP_KEYBOARD_CALLBACK:
+            await self._reply(
+                update,
+                "Shortcut keyboard restored.",
+                reply_markup=self._build_shortcuts_keyboard(),
+            )
             return
         if data.startswith(self._DIR_SELECTION_PREFIX):
             await self._handle_directory_choice(update, data)
@@ -530,7 +538,7 @@ class TelegramTorrentController:
             "- `status`: list every torrent with a short explanation of its state.\n"
             "- `/help`: show this message again.",
             markdown=True,
-            reply_markup=self._build_shortcuts_keyboard(),
+            reply_markup=self._build_help_keyboard(),
         )
 
     async def _reply(
@@ -578,6 +586,15 @@ class TelegramTorrentController:
         return ReplyKeyboardMarkup(
             [[KeyboardButton("status"), KeyboardButton("help")]],
             resize_keyboard=True,
+        )
+
+    @classmethod
+    def _build_help_keyboard(cls) -> InlineKeyboardMarkup:
+        return InlineKeyboardMarkup(
+            [
+                [InlineKeyboardButton("📡 Status", callback_data=cls._STATUS_CALLBACK)],
+                [InlineKeyboardButton("Show reply keyboard", callback_data=cls._HELP_KEYBOARD_CALLBACK)],
+            ]
         )
 
     def _build_download_dir_keyboard(self) -> InlineKeyboardMarkup:
