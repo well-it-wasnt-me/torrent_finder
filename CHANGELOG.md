@@ -2,6 +2,27 @@
 
 <!-- version list -->
 
+## v1.5.0 (2025-12-13)
+
+### Bug Fixes
+
+- Notification upon torrent download
+  ([`6bc2396`](https://github.com/well-it-wasnt-me/torrent_finder/commit/6bc23966a88ef31cb528a316a21ff5a3bd60da12))
+
+### Documentation
+
+- Updated doc and readme
+  ([`04e65a7`](https://github.com/well-it-wasnt-me/torrent_finder/commit/04e65a7714126f97dd8e73f8e065c290388f1b88))
+
+- Updated doc to reflect new changes
+  ([`e6519b4`](https://github.com/well-it-wasnt-me/torrent_finder/commit/e6519b471ddd59f75d8c30e5c2cd546ad5018c25))
+
+### Features
+
+- Ask for download location and format status table
+  ([`1b75416`](https://github.com/well-it-wasnt-me/torrent_finder/commit/1b7541693e93cf68515705f1cac2b04a4a9a3df5))
+
+
 ## v1.4.0 (2025-11-16)
 
 ### Documentation
