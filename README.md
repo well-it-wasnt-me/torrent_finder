@@ -140,7 +140,8 @@ how many options are shown. `/start` drops a tiny reply keyboard with Status/Hel
 - `help` / `/help` – shows the condensed cheat-sheet.
 
 > **Heads up:** background status polling uses Python Telegram Bot's JobQueue. Install the optional extra via
-> `pip install "python-telegram-bot[job-queue]"` to enable the completion pings.
+> `pip install "python-telegram-bot[job-queue]"` to enable the completion pings. Missing the
+> extra? The bot will fall back to a lightweight asyncio poller so you still get completion notices.
 
 ### Getting the Telegram token and chat ID
 

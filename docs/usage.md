@@ -73,9 +73,9 @@ Kick the conversation off with `/start` to expose a compact reply keyboard that 
 - `help` / `/help` – prints the command list again.
 
 > [!TIP]
-> Auto-notifications for finished torrents rely on the Telegram JobQueue. 
-> Install the optional dependency via `pip install "python-telegram-bot[job-queue]"` 
-> so the bot can schedule those background checks.
+> Auto-notifications for finished torrents prefer the Telegram JobQueue. Install
+> the optional dependency via `pip install "python-telegram-bot[job-queue]"` for native
+> scheduling; without it, the bot falls back to an internal asyncio poller so the pings still happen.
 
 Need to troubleshoot Jackett responses? Run with `--telemetry-level DEBUG` or pass the dedicated
 `--torznab-debug` flag to log a preview of the Torznab feed whenever it comes back empty.
