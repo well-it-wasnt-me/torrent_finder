@@ -140,6 +140,7 @@ class TelegramTorrentController:
         self._download_dir_options: List[Tuple[str, str]] = [
             ("Movies (default)", "/var/lib/transmission-daemon/downloads/movies"),
             ("TV Show", "/var/lib/transmission-daemon/downloads/tv_show"),
+            ("Other", "/var/lib/transmission-daemon/downloads"),
         ]
 
     async def handle_start(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
@@ -193,7 +194,7 @@ class TelegramTorrentController:
         if text.lower().startswith("search "):
             query = text[7:].strip()
             if not query:
-                await self._reply(update, "Give me something to search for, e.g. `search dune`.", markdown=True)
+                await self._reply(update, "Give me something to search for, e.g. `search the big lebowski`.", markdown=True)
                 return
             await self._perform_search(update, query)
         elif text.lower().startswith("status"):
@@ -257,17 +258,16 @@ class TelegramTorrentController:
             LOGGER.warning("Bad selection index from Telegram callback: %s", data)
             return
 
-        message = query.message
-        chat_id = message.chat_id if message else (update.effective_chat.id if update.effective_chat else None)
+        chat_id = update.effective_chat.id if update.effective_chat else None
         if not chat_id:
             LOGGER.debug("Callback without chat ID.")
             return
 
-        if message:
-            try:
-                await message.edit_reply_markup(reply_markup=None)
-            except Exception:  # pragma: no cover - best effort cleanup
-                LOGGER.debug("Could not clear inline keyboard for message %s", message.message_id)
+        try:
+            await query.edit_message_reply_markup(reply_markup=None)
+        except Exception:  # pragma: no cover - best effort cleanup
+            message_id = query.message.message_id if query.message else "inline"
+            LOGGER.debug("Could not clear inline keyboard for message %s", message_id)
 
         await self._handle_selection(update, chat_id, selection)
 
@@ -450,7 +450,12 @@ class TelegramTorrentController:
 
         return "\n".join([header_line, divider, *body_lines])
 
-    async def _poll_downloads(self, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def _poll_downloads(self, context: ContextTypes.DEFAULT_TYPE | SimpleNamespace) -> None:
+        bot = getattr(context, "bot", None)
+        if bot is None:
+            LOGGER.debug("Skipping download poll: no bot available in context.")
+            return
+
         async with self._tracking_lock:
             tracked_items = list(self._tracked_downloads.items())
 
@@ -473,7 +478,7 @@ class TelegramTorrentController:
             if status and status.is_complete:
                 completed.append((tracking_id, tracked))
                 text = f"✅ Torrent ready: {status.name}"
-                await context.bot.send_message(chat_id=tracked.chat_id, text=text)
+                await bot.send_message(chat_id=tracked.chat_id, text=text)
 
         if not completed:
             return
@@ -539,7 +544,12 @@ class TelegramTorrentController:
         """
 
         await asyncio.sleep(interval_seconds)
-        context = SimpleNamespace(bot=application.bot)
+        bot = getattr(application, "bot", None)
+        if bot is None:
+            LOGGER.debug("Skipping fallback polling: application has no bot.")
+            return
+
+        context = SimpleNamespace(bot=bot)
         while self._stop_fallback_event and not self._stop_fallback_event.is_set():
             try:
                 await self._poll_downloads(context)
