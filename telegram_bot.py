@@ -97,6 +97,7 @@ class TelegramTorrentController:
     """Bridges Telegram updates to TorrentFinder and Transmission."""
 
     _SELECTION_PREFIX = "pick:"
+    _DIR_SELECTION_PREFIX = "dir:"
     _STATUS_CALLBACK = "status"
     _STATUS_DESC = {
         "downloading": "actively downloading",
@@ -124,6 +125,11 @@ class TelegramTorrentController:
         self._pending: Dict[int, PendingSearch] = {}
         self._tracked_downloads: Dict[str, TrackedDownload] = {}
         self._tracking_lock = asyncio.Lock()
+        self._pending_download_choice: Dict[int, Candidate] = {}
+        self._download_dir_options: List[Tuple[str, str]] = [
+            ("Movies (default)", "/var/lib/transmission-daemon/downloads/movies"),
+            ("TV Show", "/var/lib/transmission-daemon/downloads/tv_show"),
+        ]
 
     async def handle_start(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
@@ -191,6 +197,9 @@ class TelegramTorrentController:
 
         if data == self._STATUS_CALLBACK:
             await self._send_status(update, show_all=False)
+            return
+        if data.startswith(self._DIR_SELECTION_PREFIX):
+            await self._handle_directory_choice(update, data)
             return
 
         if not data.startswith(self._SELECTION_PREFIX):
@@ -275,11 +284,34 @@ class TelegramTorrentController:
             return
 
         candidate = pending.candidates[selection - 1]
+        self._pending_download_choice[chat_id] = candidate
+        await self._reply(
+            update,
+            f"Where should I save *{candidate.title or '(untitled)'}*?",
+            markdown=True,
+            reply_markup=self._build_download_dir_keyboard(),
+        )
+
+    def _enqueue_download(self, candidate: Candidate, download_dir: Optional[str]) -> None:
+        self._transmission.ensure_available()
+        self._transmission.add(candidate.magnet, start_override=None, download_dir=download_dir)
+
+    async def _handle_directory_choice(self, update: Update, data: str) -> None:
+        chat_id = update.effective_chat.id if update.effective_chat else None
+        if chat_id is None:
+            return
+
+        candidate = self._pending_download_choice.pop(chat_id, None)
+        if not candidate:
+            await self._reply(update, "No torrent is waiting for a download location. Start with `search ...`.", markdown=True)
+            return
+
+        download_dir = data[len(self._DIR_SELECTION_PREFIX) :]
         await self._reply(update, f"Sending *{candidate.title or '(untitled)'}* to Transmission…", markdown=True)
 
         loop = asyncio.get_running_loop()
         try:
-            await loop.run_in_executor(None, self._enqueue_download, candidate)
+            await loop.run_in_executor(None, self._enqueue_download, candidate, download_dir)
         except Exception as exc:  # pragma: no cover
             LOGGER.exception("Failed to queue torrent")
             await self._reply(update, f"Transmission said nope: {exc}")
@@ -287,10 +319,6 @@ class TelegramTorrentController:
 
         await self._remember_download(chat_id, candidate)
         await self._reply(update, "Done. Want something else?")
-
-    def _enqueue_download(self, candidate: Candidate) -> None:
-        self._transmission.ensure_available()
-        self._transmission.add(candidate.magnet, start_override=None)
 
     async def _remember_download(self, chat_id: int, candidate: Candidate) -> None:
         tracking_id = uuid.uuid4().hex
@@ -323,15 +351,56 @@ class TelegramTorrentController:
             return
 
         heading = "Active torrents:" if not show_all else "All torrents:"
-        lines = [heading]
+        table = self._format_status_table(statuses, show_all)
+        await self._reply(update, f"{heading}\n{table}", markdown=True)
+
+    def _format_status_table(self, statuses: List[TransmissionController.TorrentStatus], show_all: bool) -> str:
+        """
+        Build a monospace table showing TORRENT NAME - PERCENTAGE - STATUS (+ details when requested).
+        """
+
+        rows = []
         for status in statuses:
-            eta = status.eta or "unknown"
-            state = status.status or "unknown"
-            explanation = ""
-            if show_all:
-                explanation = f" – {self._explain_status(state)}"
-            lines.append(f"- {status.name} — {status.percent_done:.1f}% ({state}{explanation}, ETA: {eta})")
-        await self._reply(update, "\n".join(lines))
+            raw_state = status.status or "unknown"
+            state_lower = raw_state.lower()
+            percent_done = 100.0 if state_lower == "seeding" else status.percent_done
+            state_label = "DONE" if state_lower == "seeding" else raw_state
+            note = self._explain_status(raw_state) if show_all else ""
+            if state_lower == "seeding":
+                note = "completed and seeding" if show_all else note
+            rows.append(
+                {
+                    "name": status.name,
+                    "percent": f"{percent_done:.1f}%",
+                    "state": state_label,
+                    "eta": status.eta or "—",
+                    "note": note or "",
+                }
+            )
+
+        columns: List[Tuple[str, str]] = [
+            ("Name", "name"),
+            ("% Done", "percent"),
+            ("Status", "state"),
+            ("ETA", "eta"),
+        ]
+        if show_all:
+            columns.append(("Info", "note"))
+
+        widths = []
+        for header, key in columns:
+            width = len(header)
+            for row in rows:
+                width = max(width, len(row[key]))
+            widths.append(width)
+
+        header_line = " | ".join(header.ljust(width) for (header, _), width in zip(columns, widths))
+        divider = "-+-".join("-" * width for width in widths)
+        body_lines = []
+        for row in rows:
+            body_lines.append(" | ".join(row[key].ljust(width) for (_, key), width in zip(columns, widths)))
+
+        return "```\n" + "\n".join([header_line, divider, *body_lines]) + "\n```"
 
     async def _poll_downloads(self, context: ContextTypes.DEFAULT_TYPE) -> None:
         async with self._tracking_lock:
@@ -447,6 +516,14 @@ class TelegramTorrentController:
         if len(parts) < 2:
             return False
         return parts[1].strip().lower() == "all"
+
+    def _build_download_dir_keyboard(self) -> InlineKeyboardMarkup:
+        buttons: List[List[InlineKeyboardButton]] = []
+        row: List[InlineKeyboardButton] = []
+        for label, path in self._download_dir_options:
+            row.append(InlineKeyboardButton(label, callback_data=f"{self._DIR_SELECTION_PREFIX}{path}"))
+        buttons.append(row)
+        return InlineKeyboardMarkup(buttons)
 
     def _explain_status(self, status: str) -> str:
         key = status.lower()

@@ -66,7 +66,7 @@ class TransmissionController:
             if not shutil.which("transmission-remote"):
                 raise SystemExit("transmission-remote not found in PATH.")
 
-    def add(self, magnet: str, start_override: Optional[bool] = None) -> None:
+    def add(self, magnet: str, start_override: Optional[bool] = None, download_dir: Optional[str] = None) -> None:
         """
         Add the magnet link via the configured interface.
 
@@ -76,13 +76,16 @@ class TransmissionController:
             Magnet URI to send to Transmission.
         start_override : bool, optional
             Override the start/paused behavior for just this call.
+        download_dir : str, optional
+            Target download directory for this torrent, falling back to the configured default.
         """
 
         start = self.config.start if start_override is None else start_override
+        target_dir = download_dir or self.config.download_dir
         if self.config.use_rpc:
-            self._add_via_rpc(magnet, start)
+            self._add_via_rpc(magnet, start, target_dir)
         else:
-            self._add_via_remote(magnet, start)
+            self._add_via_remote(magnet, start, target_dir)
 
     def list_torrents(self, active_only: bool = False) -> List["TransmissionController.TorrentStatus"]:
         """
@@ -99,7 +102,7 @@ class TransmissionController:
             statuses = [status for status in statuses if not status.is_complete]
         return statuses
 
-    def _add_via_remote(self, magnet: str, start: bool) -> None:
+    def _add_via_remote(self, magnet: str, start: bool, download_dir: Optional[str]) -> None:
         """
         Use ``transmission-remote`` to add a torrent.
 
@@ -109,6 +112,8 @@ class TransmissionController:
             Magnet link to add.
         start : bool
             Whether to start the torrent immediately.
+        download_dir : str, optional
+            Destination folder for this torrent.
 
         Raises
         ------
@@ -120,8 +125,8 @@ class TransmissionController:
         args = ["transmission-remote", target, "--add", magnet]
         if self.config.auth:
             args.extend(["--auth", self.config.auth])
-        if self.config.download_dir:
-            args.extend(["--download-dir", self.config.download_dir])
+        if download_dir:
+            args.extend(["--download-dir", download_dir])
         args.append("--start" if start else "--no-start")
 
         logging.debug("Running transmission-remote with args: %s", args)
@@ -136,7 +141,7 @@ class TransmissionController:
         if result.stdout:
             logging.info(result.stdout.strip())
 
-    def _add_via_rpc(self, magnet: str, start: bool) -> None:
+    def _add_via_rpc(self, magnet: str, start: bool, download_dir: Optional[str]) -> None:
         """
         Use the Transmission RPC API to add a torrent.
 
@@ -157,7 +162,7 @@ class TransmissionController:
             raise SystemExit("Install transmission-rpc: pip install transmission-rpc")
 
         client = self._build_rpc_client()
-        client.add_torrent(magnet, download_dir=self.config.download_dir or None, paused=not start)
+        client.add_torrent(magnet, download_dir=download_dir or None, paused=not start)
 
     def _build_rpc_client(self):
         if transmission_rpc is None:

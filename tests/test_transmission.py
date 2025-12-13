@@ -51,6 +51,7 @@ class TransmissionControllerTests(unittest.TestCase):
         args = run_mock.call_args[0][0]
         self.assertIn("--auth", args)
         self.assertIn("--start", args)
+        self.assertIn("/downloads", args)
 
     @patch("torrent_finder.transmission.transmission_rpc.Client")
     def test_add_rpc_invokes_client(self, client_mock) -> None:
@@ -67,6 +68,17 @@ class TransmissionControllerTests(unittest.TestCase):
         controller.add("magnet:?xt=123")
         client_mock.assert_called_once_with(host="host", port=9091, username="user", password="pass")
         client_mock.return_value.add_torrent.assert_called_once()
+
+    @patch("torrent_finder.transmission.subprocess.run")
+    @patch("torrent_finder.transmission.shutil.which", return_value="/usr/bin/transmission-remote")
+    def test_add_remote_allows_directory_override(self, which_mock, run_mock) -> None:
+        run_mock.return_value = MagicMock(returncode=0, stdout="added", stderr="")
+        config = TransmissionConfig(download_dir="/downloads", use_rpc=False, host="host", port=1234, start=True)
+        controller = TransmissionController(config)
+        controller.add("magnet:?xt=123", download_dir="/custom/dir")
+        args = run_mock.call_args[0][0]
+        self.assertIn("/custom/dir", args)
+        self.assertNotIn("/downloads", args)
 
     @patch("torrent_finder.transmission.transmission_rpc.Client")
     def test_list_torrents_rpc_filters_active(self, client_mock) -> None:
