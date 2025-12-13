@@ -25,7 +25,7 @@ from functools import partial
 from types import SimpleNamespace
 from typing import Awaitable, Callable, Dict, List, Optional, Tuple
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, Update, ForceReply
 from telegram.constants import ParseMode
 from telegram.helpers import escape_markdown
 from telegram.ext import (
@@ -103,7 +103,11 @@ class TelegramTorrentController:
     _SELECTION_PREFIX = "pick:"
     _DIR_SELECTION_PREFIX = "dir:"
     _STATUS_CALLBACK = "status"
+    _SEARCH_TV_CALLBACK = "search-tv"
+    _SEARCH_MOVIE_CALLBACK = "search-movie"
     _HELP_KEYBOARD_CALLBACK = "help-keyboard"
+    _TV_SEARCH_PROMPT = "Send the TV show name to search:"
+    _MOVIE_SEARCH_PROMPT = "Send the movie name to search:"
     _STATUS_DESC = {
         "downloading": "actively downloading",
         "seeding": "completed and seeding",
@@ -171,6 +175,21 @@ class TelegramTorrentController:
         if not self._is_authorized(update):
             return
 
+        if self._is_tv_search_reply(update.message):
+            tv_query = text
+            if not tv_query:
+                await self._reply(update, "Send a TV show name to search.")
+                return
+            await self._perform_search(update, f"tv {tv_query}")
+            return
+        if self._is_movie_search_reply(update.message):
+            movie_query = text
+            if not movie_query:
+                await self._reply(update, "Send a movie name to search.")
+                return
+            await self._perform_search(update, f"movies {movie_query}")
+            return
+
         if text.lower().startswith("search "):
             query = text[7:].strip()
             if not query:
@@ -208,6 +227,20 @@ class TelegramTorrentController:
                 update,
                 "Shortcut keyboard restored.",
                 reply_markup=self._build_shortcuts_keyboard(),
+            )
+            return
+        if data == self._SEARCH_TV_CALLBACK:
+            await self._reply(
+                update,
+                self._TV_SEARCH_PROMPT,
+                reply_markup=ForceReply(selective=True, input_field_placeholder="e.g., The Expanse"),
+            )
+            return
+        if data == self._SEARCH_MOVIE_CALLBACK:
+            await self._reply(
+                update,
+                self._MOVIE_SEARCH_PROMPT,
+                reply_markup=ForceReply(selective=True, input_field_placeholder="e.g., Dune Part Two"),
             )
             return
         if data.startswith(self._DIR_SELECTION_PREFIX):
@@ -592,10 +625,26 @@ class TelegramTorrentController:
     def _build_help_keyboard(cls) -> InlineKeyboardMarkup:
         return InlineKeyboardMarkup(
             [
+                [
+                    InlineKeyboardButton("🎬 Search movie", callback_data=cls._SEARCH_MOVIE_CALLBACK),
+                    InlineKeyboardButton("📺 Search TV show", callback_data=cls._SEARCH_TV_CALLBACK),
+                ],
                 [InlineKeyboardButton("📡 Status", callback_data=cls._STATUS_CALLBACK)],
                 [InlineKeyboardButton("Show reply keyboard", callback_data=cls._HELP_KEYBOARD_CALLBACK)],
             ]
         )
+
+    def _is_tv_search_reply(self, message) -> bool:
+        reply = getattr(message, "reply_to_message", None)
+        if not reply or not getattr(reply, "text", None):
+            return False
+        return reply.text.strip() == self._TV_SEARCH_PROMPT
+
+    def _is_movie_search_reply(self, message) -> bool:
+        reply = getattr(message, "reply_to_message", None)
+        if not reply or not getattr(reply, "text", None):
+            return False
+        return reply.text.strip() == self._MOVIE_SEARCH_PROMPT
 
     def _build_download_dir_keyboard(self) -> InlineKeyboardMarkup:
         buttons: List[List[InlineKeyboardButton]] = []
