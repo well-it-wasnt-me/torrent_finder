@@ -26,6 +26,8 @@ from types import SimpleNamespace
 from typing import Awaitable, Callable, Dict, List, Optional, Tuple
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, Update
+from telegram.constants import ParseMode
+from telegram.helpers import escape_markdown
 from telegram.ext import (
     Application,
     ApplicationBuilder,
@@ -153,8 +155,7 @@ class TelegramTorrentController:
     async def handle_status_command(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
             return
-        show_all = self._parse_status_scope(update.message.text if update.message else "")
-        await self._send_status(update, show_all)
+        await self._send_status(update)
 
     async def handle_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not update.message or not update.message.text:
@@ -176,8 +177,7 @@ class TelegramTorrentController:
                 return
             await self._perform_search(update, query)
         elif text.lower().startswith("status"):
-            show_all = self._parse_status_scope(text)
-            await self._send_status(update, show_all)
+            await self._send_status(update)
         elif text.lower() == "help":
             await self._send_help(update)
         elif text.isdigit():
@@ -200,7 +200,7 @@ class TelegramTorrentController:
             return
 
         if data == self._STATUS_CALLBACK:
-            await self._send_status(update, show_all=False)
+            await self._send_status(update)
             return
         if data.startswith(self._DIR_SELECTION_PREFIX):
             await self._handle_directory_choice(update, data)
@@ -335,11 +335,11 @@ class TelegramTorrentController:
         async with self._tracking_lock:
             self._tracked_downloads[tracking_id] = tracked
 
-    async def _send_status(self, update: Update, show_all: bool) -> None:
+    async def _send_status(self, update: Update) -> None:
         await self._reply(update, "Checking Transmission…")
         loop = asyncio.get_running_loop()
         try:
-            statuses = await loop.run_in_executor(None, self._transmission.list_torrents, not show_all)
+            statuses = await loop.run_in_executor(None, self._transmission.list_torrents, False)
         except SystemExit as exc:  # pragma: no cover - defensive
             LOGGER.warning("Transmission status check aborted: %s", exc)
             await self._reply(update, f"Status check failed: {exc}")
@@ -350,15 +350,19 @@ class TelegramTorrentController:
             return
 
         if not statuses:
-            msg = "No active torrents in Transmission." if not show_all else "Transmission has no torrents yet."
-            await self._reply(update, msg)
+            await self._reply(update, "Transmission has no torrents yet.")
             return
 
-        heading = "Active torrents:" if not show_all else "All torrents:"
-        table = self._format_status_table(statuses, show_all)
-        await self._reply(update, f"{heading}\n{table}", markdown=True)
+        heading = f"*{escape_markdown('All torrents', version=2)}*"
+        table = self._format_status_table(statuses)
+        table_message = f"{heading}\n```\n{table}\n```"
+        await self._reply(
+            update,
+            table_message,
+            parse_mode=ParseMode.MARKDOWN_V2,
+        )
 
-    def _format_status_table(self, statuses: List[TransmissionController.TorrentStatus], show_all: bool) -> str:
+    def _format_status_table(self, statuses: List[TransmissionController.TorrentStatus]) -> str:
         """
         Build a monospace table showing TORRENT NAME - PERCENTAGE - STATUS (+ details when requested).
         """
@@ -369,16 +373,16 @@ class TelegramTorrentController:
             state_lower = raw_state.lower()
             percent_done = 100.0 if state_lower == "seeding" else status.percent_done
             state_label = "DONE" if state_lower == "seeding" else raw_state
-            note = self._explain_status(raw_state) if show_all else ""
+            note = self._explain_status(raw_state)
             if state_lower == "seeding":
-                note = "completed and seeding" if show_all else note
+                note = "completed and seeding"
             rows.append(
                 {
                     "name": status.name,
                     "percent": f"{percent_done:.1f}%",
                     "state": state_label,
                     "eta": status.eta or "—",
-                    "note": note or "",
+                    "note": note,
                 }
             )
 
@@ -387,9 +391,8 @@ class TelegramTorrentController:
             ("% Done", "percent"),
             ("Status", "state"),
             ("ETA", "eta"),
+            ("Info", "note"),
         ]
-        if show_all:
-            columns.append(("Info", "note"))
 
         widths = []
         for header, key in columns:
@@ -404,7 +407,7 @@ class TelegramTorrentController:
         for row in rows:
             body_lines.append(" | ".join(row[key].ljust(width) for (_, key), width in zip(columns, widths)))
 
-        return "```\n" + "\n".join([header_line, divider, *body_lines]) + "\n```"
+        return "\n".join([header_line, divider, *body_lines])
 
     async def _poll_downloads(self, context: ContextTypes.DEFAULT_TYPE) -> None:
         async with self._tracking_lock:
@@ -524,20 +527,29 @@ class TelegramTorrentController:
             "- `search <title>`: look up torrents and see the top matches.\n"
             "- Prefix with `search movies ...`, `search tv ...`, or `search software ...` for category presets.\n"
             "- `<number>` or button tap: pick one of the previously listed torrents to start the download.\n"
-            "- `status`: show Transmission's active downloads (inline button available).\n"
-            "- `status all`: list every torrent with a short explanation of its state.\n"
+            "- `status`: list every torrent with a short explanation of its state.\n"
             "- `/help`: show this message again.",
             markdown=True,
+            reply_markup=self._build_shortcuts_keyboard(),
         )
 
-    async def _reply(self, update: Update, text: str, markdown: bool = False, reply_markup=None) -> None:
+    async def _reply(
+        self,
+        update: Update,
+        text: str,
+        markdown: bool = False,
+        reply_markup=None,
+        parse_mode: Optional[str] = None,
+    ) -> None:
         message = update.message
         if not message and update.callback_query:
             message = update.callback_query.message
         if not message:
             return
-        parse_mode = "Markdown" if markdown else None
-        await message.reply_text(text, parse_mode=parse_mode, reply_markup=reply_markup)
+        resolved_parse_mode = parse_mode
+        if not resolved_parse_mode and markdown:
+            resolved_parse_mode = ParseMode.MARKDOWN
+        await message.reply_text(text, parse_mode=resolved_parse_mode, reply_markup=reply_markup)
 
     @staticmethod
     def _format_search_prompt(query: str, preset_slug: Optional[str]) -> str:
@@ -567,14 +579,6 @@ class TelegramTorrentController:
             [[KeyboardButton("status"), KeyboardButton("help")]],
             resize_keyboard=True,
         )
-
-    def _parse_status_scope(self, text: Optional[str]) -> bool:
-        if not text:
-            return False
-        parts = text.strip().split(maxsplit=1)
-        if len(parts) < 2:
-            return False
-        return parts[1].strip().lower() == "all"
 
     def _build_download_dir_keyboard(self) -> InlineKeyboardMarkup:
         buttons: List[List[InlineKeyboardButton]] = []

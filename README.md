@@ -125,7 +125,7 @@ Flow:
 - It responds with the top five matches (seed/leech counts included).
 - Reply with the list number *or tap the inline button* to pick a result; the bot will then ask where to save it and show a couple of download directory buttons.
 - Update the directory presets in `telegram_bot.py` (`_download_dir_options`) to match your Transmission setup before relying on the buttons; you can add more paths or point them at your existing watch/download folders.
-- Send `status` (or tap the button under the results) any time to see active downloads and their progress; run `status all` when you need every torrent plus a quick explanation of each state (downloading, seeding, stopped, etc.).
+- Send `status` (or tap the button under the results) any time to see every torrent plus a quick explanation of each state (downloading, seeding, stopped, etc.).
 - The bot pings you once a Telegram-triggered download finishes so you can hit play quicker.
 
 The token can also come from the `telegram.bot_token` section in `config.json` (or `TELEGRAM_TOKEN`). Add
@@ -135,8 +135,7 @@ how many options are shown. `/start` drops a tiny reply keyboard with Status/Hel
 **Quick commands**
 - `search <query>` – fetches results; prefix with `movies`, `tv`, `software`, `software mac`, `software win`, or `all` to reuse the presets listed above.
 - `<number>` – selects one of the previous results (inline buttons do the same).
-- `status` – checks Transmission (also available as a dedicated button and inline callback).
-- `status all` – lists every torrent and annotates Transmission’s reported state (downloading, seeding, stopped, queued).
+- `status` – lists every torrent and annotates Transmission’s reported state (also available as a dedicated button and inline callback).
 - `help` / `/help` – shows the condensed cheat-sheet.
 
 > **Heads up:** background status polling uses Python Telegram Bot's JobQueue. Install the optional extra via
