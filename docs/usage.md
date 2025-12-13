@@ -56,22 +56,26 @@ Flow:
 1. Send `search Cowboy Bepop` (or any `search <keywords>` query).
 2. Add an optional category keyword upfront—`search movies dune`, `search tv s04`, `search software mac final cut`, or `search all dune`—to reuse the CLI presets inside Telegram.
 3. The bot replies with the top five ranked results and seed/peer stats.
-4. Respond with the list number or tap the inline button to add that torrent to Transmission.
-5. Send `status` (or tap the Status button shown below each result set) to check active downloads; use `status all` when you want every torrent plus a quick read on its Transmission state (downloading, seeding, stopped, etc.). The bot auto-notifies you when a Telegram-triggered download finishes regardless.
+4. Respond with the list number or tap the inline button to pick one; you will then be prompted to pick a download folder from a set of buttons before it gets sent to Transmission.
+5. Update the folder presets in `telegram_bot.py` (`_download_dir_options`) to reflect your Transmission directories—the defaults are just examples and can be expanded with your own paths.
+6. Send `status` (or tap the Status button shown below each result set) to check active downloads; use `status all` when you want every torrent plus a quick read on its Transmission state (downloading, seeding, stopped, etc.). The bot auto-notifies you when a Telegram-triggered download finishes regardless.
 
 Populate the `telegram` section of `config.json` with your `bot_token` (and optional `chat_id`) or override with `--token` / `--chat-id`. Tweak `--max-results` when you want more or fewer options. The bot shares the same `config.json` as the CLI, so keep your Torznab/Transmission settings up to date there.
 
 Kick the conversation off with `/start` to expose a compact reply keyboard that keeps Status/Help buttons handy for tap-friendly control.
 
 **Commands recap**
+
 - `search <query>` – runs a search; prepend the category keywords listed above for quick filters.
 - `<number>` or tapping the inline button – sends that specific result to Transmission.
 - `status` – displays active torrents (also exposed via the inline “📡 Status” button).
 - `status all` – lists every torrent and adds a short explanation of each Transmission state.
 - `help` / `/help` – prints the command list again.
 
-!!! tip
-    Auto-notifications for finished torrents rely on the Telegram JobQueue. Install the optional dependency via `pip install "python-telegram-bot[job-queue]"` so the bot can schedule those background checks.
+> [!TIP]
+> Auto-notifications for finished torrents rely on the Telegram JobQueue. 
+> Install the optional dependency via `pip install "python-telegram-bot[job-queue]"` 
+> so the bot can schedule those background checks.
 
 Need to troubleshoot Jackett responses? Run with `--telemetry-level DEBUG` or pass the dedicated
 `--torznab-debug` flag to log a preview of the Torznab feed whenever it comes back empty.

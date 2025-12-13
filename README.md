@@ -123,7 +123,8 @@ Flow:
 - Send `search the movie title` to the bot.
 - Add an optional category word—`search movies dune`, `search tv s04`, `search software mac final cut`, or `search all dune`—to switch Torznab filters without editing the config.
 - It responds with the top five matches (seed/leech counts included).
-- Reply with the list number *or tap the inline button* to push that magnet into Transmission.
+- Reply with the list number *or tap the inline button* to pick a result; the bot will then ask where to save it and show a couple of download directory buttons.
+- Update the directory presets in `telegram_bot.py` (`_download_dir_options`) to match your Transmission setup before relying on the buttons; you can add more paths or point them at your existing watch/download folders.
 - Send `status` (or tap the button under the results) any time to see active downloads and their progress; run `status all` when you need every torrent plus a quick explanation of each state (downloading, seeding, stopped, etc.).
 - The bot pings you once a Telegram-triggered download finishes so you can hit play quicker.
 
