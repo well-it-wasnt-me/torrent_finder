@@ -2,6 +2,24 @@
 
 <!-- version list -->
 
+## v1.5.2 (2025-12-13)
+
+### Bug Fixes
+
+- Various fixes
+  ([`b08a99d`](https://github.com/well-it-wasnt-me/torrent_finder/commit/b08a99db1f97d03821a211f7b936c9d49725a757))
+
+### Chores
+
+- Updated code of conduct
+  ([`05fc714`](https://github.com/well-it-wasnt-me/torrent_finder/commit/05fc71497b6c66aa65643f64692090299ea6de92))
+
+### Code Style
+
+- New buttons
+  ([`5904192`](https://github.com/well-it-wasnt-me/torrent_finder/commit/59041924e33aed4a3c6c6c750238382ed1ce4285))
+
+
 ## v1.5.1 (2025-12-13)
 
 
