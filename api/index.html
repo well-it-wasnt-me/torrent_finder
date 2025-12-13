@@ -88,6 +88,7 @@
 <p>The Python modules ship with docstrings and type hints so you can script your own workflows. Highlighted entry points:</p>
 <ul>
 <li><strong><code>torrent_finder.config</code></strong> – loads and validates <code>config.json</code>, exposes dataclasses for Torznab, Transmission, Telegram, and logging.</li>
+<li><strong><code>torrent_finder.categories</code></strong> – defines category presets, friendly labels, and helpers that extract preset keywords from user queries.</li>
 <li><strong><code>torrent_finder.torznab</code></strong> – lightweight Torznab client that wraps Jackett and produces <code>Candidate</code> objects.</li>
 <li><strong><code>torrent_finder.finder</code></strong> – orchestration logic that ranks candidates and selects the best torrent.</li>
 <li><strong><code>torrent_finder.models</code></strong> – dataclasses (<code>Candidate</code>) and helper methods used during ranking.</li>
