@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.6.0 (2026-02-01)
+
+### Features
+
+- **telegram**: UI overhaul, smarter results, and real commands
+  ([`e4c42ca`](https://github.com/well-it-wasnt-me/torrent_finder/commit/e4c42ca7263047acf43eb46d1c1f12b6a06c0096))
+
+
 ## v1.5.2 (2025-12-13)
 
 ### Bug Fixes
