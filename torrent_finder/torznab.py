@@ -235,15 +235,41 @@ class TorznabClient:
 
             seeders = None
             leechers = None
+            size_bytes = None
+            source = "torznab"
             for attr in item.findall("{http://torznab.com/schemas/2015/feed}attr"):
                 name = (attr.get("name") or "").lower()
-                value = _safe_int(attr.get("value"))
+                raw_value = attr.get("value")
+                value = _safe_int(raw_value)
                 if name == "seeders":
                     seeders = value
                 elif name in ("leechers", "peers"):
                     leechers = value
+                elif name == "size":
+                    size_bytes = value
+                elif name in ("indexer", "tracker", "source"):
+                    if raw_value:
+                        source = raw_value.strip()
 
-            matches.append(Candidate(magnet=magnet, title=title or None, seeders=seeders, leechers=leechers))
+            if size_bytes is None:
+                enclosure = item.find("enclosure")
+                if enclosure is not None:
+                    size_bytes = _safe_int(enclosure.get("length"))
+
+            if size_bytes is None:
+                size_text = item.findtext("size") or item.findtext("{http://torznab.com/schemas/2015/feed}size")
+                size_bytes = _safe_int(size_text)
+
+            matches.append(
+                Candidate(
+                    magnet=magnet,
+                    title=title or None,
+                    seeders=seeders,
+                    leechers=leechers,
+                    size_bytes=size_bytes,
+                    source=source,
+                )
+            )
 
         return matches
 

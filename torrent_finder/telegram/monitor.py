@@ -1,5 +1,9 @@
 import asyncio
+import base64
+import binascii
+import re
 import uuid
+from urllib.parse import parse_qs, urlparse
 from dataclasses import dataclass
 from functools import partial
 from types import SimpleNamespace
@@ -25,6 +29,7 @@ class TrackedDownload:
     chat_id: int
     title: str
     magnet: str
+    info_hash: Optional[str] = None
 
 
 class DownloadMonitor:
@@ -44,6 +49,7 @@ class DownloadMonitor:
             chat_id=chat_id,
             title=candidate.title or "",
             magnet=candidate.magnet or "",
+            info_hash=self._extract_info_hash(candidate.magnet or ""),
         )
         async with self._tracking_lock:
             self._tracked_downloads[tracking_id] = tracked
@@ -152,11 +158,51 @@ class DownloadMonitor:
     ) -> Optional[TransmissionController.TorrentStatus]:
         title = tracked.title.lower() if tracked.title else None
         for status in statuses:
+            status_hash = status.info_hash or DownloadMonitor._extract_info_hash(status.magnet or "")
+            if tracked.info_hash and status_hash and tracked.info_hash == status_hash:
+                return status
             if status.magnet and tracked.magnet and status.magnet == tracked.magnet:
                 return status
-            if title and status.name and status.name.lower() == title:
+            if title and status.name and DownloadMonitor._title_matches(title, status.name):
                 return status
         return None
+
+    @staticmethod
+    def _extract_info_hash(magnet: str) -> Optional[str]:
+        if not magnet:
+            return None
+        parsed = urlparse(magnet)
+        if parsed.scheme and parsed.scheme != "magnet":
+            return None
+        query = parse_qs(parsed.query)
+        xt_values = query.get("xt", [])
+        for xt in xt_values:
+            lowered = xt.lower()
+            if not lowered.startswith("urn:btih:"):
+                continue
+            raw_hash = xt[9:].strip()
+            if re.fullmatch(r"[0-9a-fA-F]{40}", raw_hash):
+                return raw_hash.lower()
+            if re.fullmatch(r"[A-Z2-7]{32}", raw_hash, flags=re.IGNORECASE):
+                try:
+                    return base64.b32decode(raw_hash.upper(), casefold=True).hex()
+                except (ValueError, binascii.Error):
+                    return None
+        return None
+
+    @staticmethod
+    def _title_matches(expected: str, actual: str) -> bool:
+        if not expected or not actual:
+            return False
+        expected_norm = DownloadMonitor._normalize_title(expected)
+        actual_norm = DownloadMonitor._normalize_title(actual)
+        if expected_norm == actual_norm:
+            return True
+        return expected_norm in actual_norm or actual_norm in expected_norm
+
+    @staticmethod
+    def _normalize_title(value: str) -> str:
+        return re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
 
     @staticmethod
     def _chain_lifecycle_callback(

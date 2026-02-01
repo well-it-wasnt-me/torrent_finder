@@ -51,3 +51,33 @@ def test_session_is_thread_local() -> None:
 
     assert len(sessions) == 2
     assert sessions[0] is not sessions[1]
+
+
+def test_parse_items_sets_size_and_source() -> None:
+    client = _make_client()
+    item = _build_item(
+        "<title>Example</title>"
+        '<enclosure url="magnet:?xt=urn:btih:ABC123" length="2048" />'
+        '<torznab:attr name="seeders" value="5" />'
+        '<torznab:attr name="size" value="1048576" />'
+        '<torznab:attr name="indexer" value="Jackett" />'
+    )
+    candidates = client._parse_items([item], "Example")
+    assert len(candidates) == 1
+    candidate = candidates[0]
+    assert candidate.size_bytes == 1048576
+    assert candidate.source == "Jackett"
+    assert candidate.seeders == 5
+
+
+def test_parse_items_falls_back_to_enclosure_length() -> None:
+    client = _make_client()
+    item = _build_item(
+        "<title>Sample</title>"
+        '<enclosure url="magnet:?xt=urn:btih:DEF456" length="4096" />'
+    )
+    candidates = client._parse_items([item], "Sample")
+    assert len(candidates) == 1
+    candidate = candidates[0]
+    assert candidate.size_bytes == 4096
+    assert candidate.source == "torznab"

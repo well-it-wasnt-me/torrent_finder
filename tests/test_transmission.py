@@ -102,6 +102,31 @@ class TransmissionControllerTests(unittest.TestCase):
         self.assertEqual(statuses[0].name, "Active")
         self.assertFalse(statuses[0].is_complete)
 
+    @patch("torrent_finder.transmission.transmission_rpc.Client")
+    def test_list_torrents_rpc_reads_snake_case_percent(self, client_mock) -> None:
+        class DummyTorrent:
+            def __init__(self, **kwargs):
+                self.__dict__.update(kwargs)
+
+        client_mock.return_value.get_torrents.return_value = [
+            DummyTorrent(
+                id=3,
+                name="Snake Case",
+                status="downloading",
+                percent_done=0.4,
+                eta=300,
+                magnetLink="magnet:?xt=cccc",
+            )
+        ]
+
+        config = TransmissionConfig(
+            download_dir="/downloads", use_rpc=True, host="host", port=9091, username="user", password="pass"
+        )
+        controller = TransmissionController(config)
+        statuses = controller.list_torrents(active_only=False)
+        self.assertEqual(len(statuses), 1)
+        self.assertAlmostEqual(statuses[0].percent_done, 40.0)
+
     @patch("torrent_finder.transmission.subprocess.run")
     def test_list_torrents_remote_parses_output(self, run_mock) -> None:
         run_mock.return_value = MagicMock(

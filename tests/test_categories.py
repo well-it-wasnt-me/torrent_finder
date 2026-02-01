@@ -28,6 +28,30 @@ class CategoryPresetTests(unittest.TestCase):
         self.assertEqual(remainder, "dune")
         self.assertEqual(slug, "all")
 
+    def test_extract_handles_comics_keyword(self) -> None:
+        cat, remainder, slug = categories.extract_preset_from_query("comics saga")
+        self.assertEqual(cat, "7030")
+        self.assertEqual(remainder, "saga")
+        self.assertEqual(slug, "comics")
+
+    def test_extract_handles_zip_files_keyword(self) -> None:
+        cat, remainder, slug = categories.extract_preset_from_query("zip files release pack")
+        self.assertEqual(cat, "8000")
+        self.assertEqual(remainder, "release pack")
+        self.assertEqual(slug, "zip")
+
+    def test_extract_handles_dump_alias(self) -> None:
+        cat, remainder, slug = categories.extract_preset_from_query("dump whatever dune")
+        self.assertEqual(cat, "")
+        self.assertEqual(remainder, "dune")
+        self.assertEqual(slug, "all")
+
+    def test_available_presets_include_new_slugs(self) -> None:
+        presets = categories.available_presets()
+        self.assertIn("comics", presets)
+        self.assertIn("zip", presets)
+        self.assertIn("all", presets)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -65,7 +65,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--category",
         choices=available_presets(),
-        help="Quick category preset (movies, tv, software, software-mac, software-win, all).",
+        help="Quick category preset (movies, tv, comics, software, software-mac, software-win, zip, all).",
     )
 
     parser.add_argument("--debug", action="store_true", help="Enable debug logging regardless of config.")

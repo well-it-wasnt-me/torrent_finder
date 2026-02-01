@@ -19,6 +19,7 @@ class Candidate:
     title: Optional[str] = None
     seeders: Optional[int] = None
     leechers: Optional[int] = None
+    size_bytes: Optional[int] = None
     source: str = "torznab"
 
     def rank_tuple(self) -> Tuple[int, float, int]:

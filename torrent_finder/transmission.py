@@ -44,6 +44,7 @@ class TransmissionController:
         percent_done: float
         eta: Optional[str]
         magnet: Optional[str] = None
+        info_hash: Optional[str] = None
 
         @property
         def is_complete(self) -> bool:
@@ -86,6 +87,24 @@ class TransmissionController:
             self._add_via_rpc(magnet, start, target_dir)
         else:
             self._add_via_remote(magnet, start, target_dir)
+
+    def stop_and_remove(self, torrent_id: int, delete_data: bool = False) -> None:
+        """
+        Stop a torrent and remove it from Transmission.
+
+        Parameters
+        ----------
+        torrent_id : int
+            Transmission torrent ID.
+        delete_data : bool, optional
+            When True, also delete local data (default False).
+        """
+
+        self.ensure_available()
+        if self.config.use_rpc:
+            self._stop_and_remove_rpc(torrent_id, delete_data)
+        else:
+            self._stop_and_remove_remote(torrent_id, delete_data)
 
     def list_torrents(self, active_only: bool = False) -> List["TransmissionController.TorrentStatus"]:
         """
@@ -164,6 +183,32 @@ class TransmissionController:
         client = self._build_rpc_client()
         client.add_torrent(magnet, download_dir=download_dir or None, paused=not start)
 
+    def _stop_and_remove_rpc(self, torrent_id: int, delete_data: bool) -> None:
+        if transmission_rpc is None:
+            raise SystemExit("Install transmission-rpc: pip install transmission-rpc")
+        client = self._build_rpc_client()
+        client.stop_torrent(torrent_id)
+        client.remove_torrent(torrent_id, delete_data=delete_data)
+
+    def _stop_and_remove_remote(self, torrent_id: int, delete_data: bool) -> None:
+        target = f"{self.config.host}:{self.config.port}"
+        base_args = ["transmission-remote", target, "--torrent", str(torrent_id)]
+        if self.config.auth:
+            base_args.extend(["--auth", self.config.auth])
+
+        for action in ("--stop", "--remove-and-delete" if delete_data else "--remove"):
+            args = [*base_args, action]
+            logging.debug("Running transmission-remote with args: %s", args)
+            result = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if result.returncode != 0:
+                raise SystemExit(
+                    "transmission-remote failed {code}\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}".format(
+                        code=result.returncode, stdout=result.stdout, stderr=result.stderr
+                    )
+                )
+            if result.stdout:
+                logging.info(result.stdout.strip())
+
     def _build_rpc_client(self):
         if transmission_rpc is None:
             raise SystemExit("Install transmission-rpc: pip install transmission-rpc")
@@ -179,10 +224,16 @@ class TransmissionController:
         torrents = client.get_torrents()
         statuses: List[TransmissionController.TorrentStatus] = []
         for torrent in torrents:
-            percent = float(getattr(torrent, "percentDone", 0.0) or 0.0) * 100.0
+            raw_percent = getattr(torrent, "percentDone", None)
+            if raw_percent is None:
+                raw_percent = getattr(torrent, "percent_done", None)
+            percent = float(raw_percent) if raw_percent is not None else 0.0
+            if percent <= 1.0:
+                percent *= 100.0
             status_text = str(getattr(torrent, "status", "unknown"))
             eta_seconds = getattr(torrent, "eta", None)
             magnet = getattr(torrent, "magnetLink", None)
+            info_hash = getattr(torrent, "hashString", None) or getattr(torrent, "hash_string", None)
             torrent_id = getattr(torrent, "id", None)
             name = getattr(torrent, "name", "") or "(untitled)"
             statuses.append(
@@ -193,6 +244,7 @@ class TransmissionController:
                     percent_done=percent,
                     eta=self._format_eta_seconds(eta_seconds),
                     magnet=magnet,
+                    info_hash=self._normalize_info_hash(str(info_hash)) if info_hash else None,
                 )
             )
         return statuses
@@ -232,6 +284,7 @@ class TransmissionController:
             torrent_id = self._safe_int(current.get("id"))
             percent = self._safe_float(current.get("percent"))
             eta_value = self._clean_eta(current.get("eta"))
+            info_hash = self._normalize_info_hash(current.get("hash"))
             statuses.append(
                 TransmissionController.TorrentStatus(
                     torrent_id=torrent_id,
@@ -240,6 +293,7 @@ class TransmissionController:
                     percent_done=percent,
                     eta=eta_value,
                     magnet=current.get("magnet"),
+                    info_hash=info_hash,
                 )
             )
             current.clear()
@@ -280,6 +334,7 @@ class TransmissionController:
             "state": "status",
             "eta": "eta",
             "magnet": "magnet",
+            "hash": "hash",
         }
         return mapping.get(key)
 
@@ -312,6 +367,12 @@ class TransmissionController:
         if lowered in {"unknown", "none", "n/a"}:
             return None
         return value
+
+    @staticmethod
+    def _normalize_info_hash(value: Optional[str]) -> Optional[str]:
+        if not value:
+            return None
+        return re.sub(r"\s+", "", value).lower()
 
     @staticmethod
     def _format_eta_seconds(seconds: Optional[Union[int, float, timedelta]]) -> Optional[str]:

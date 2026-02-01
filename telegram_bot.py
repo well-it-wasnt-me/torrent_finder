@@ -12,8 +12,9 @@ python telegram_bot.py --token <bot-token> [--config config.json]
 import argparse
 import logging
 import os
-from typing import Optional, Tuple, List
+from typing import Awaitable, Callable, List, Optional, Tuple
 
+from telegram import BotCommand
 from telegram.ext import (
     Application,
     ApplicationBuilder,
@@ -42,6 +43,32 @@ DEFAULT_DOWNLOAD_DIR_OPTIONS: List[Tuple[str, str]] = [
     ("TV Show", "/var/lib/transmission-daemon/downloads/tv_show"),
     ("Other", "/var/lib/transmission-daemon/downloads"),
 ]
+
+
+def _chain_lifecycle_callback(
+    existing: Optional[Callable[[Application], Awaitable[None]]],
+    new_callback: Callable[[Application], Awaitable[None]],
+) -> Callable[[Application], Awaitable[None]]:
+    if existing is None:
+        return new_callback
+
+    async def combined(application: Application) -> None:
+        await existing(application)
+        await new_callback(application)
+
+    return combined
+
+
+async def _set_bot_commands(application: Application) -> None:
+    await application.bot.set_my_commands(
+        [
+            BotCommand("start", "Show quick instructions and keyboard"),
+            BotCommand("help", "Show usage and search tips"),
+            BotCommand("status", "List torrents and their state"),
+            BotCommand("start_magnet", "Queue a magnet link directly"),
+            BotCommand("remove", "Stop and remove a torrent"),
+        ]
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -92,10 +119,16 @@ def build_app(
     keyboards = KeyboardBuilder(
         selection_prefix=TelegramTorrentController.SELECTION_PREFIX,
         dir_selection_prefix=TelegramTorrentController.DIR_SELECTION_PREFIX,
-        status_callback=TelegramTorrentController.STATUS_CALLBACK,
-        search_movie_callback=TelegramTorrentController.SEARCH_MOVIE_CALLBACK,
-        search_tv_callback=TelegramTorrentController.SEARCH_TV_CALLBACK,
-        help_keyboard_callback=TelegramTorrentController.HELP_KEYBOARD_CALLBACK,
+        menu_callback=TelegramTorrentController.MENU_CALLBACK,
+        search_callback=TelegramTorrentController.SEARCH_CALLBACK,
+        help_callback=TelegramTorrentController.HELP_CALLBACK,
+        status_all_callback=TelegramTorrentController.STATUS_ALL_CALLBACK,
+        status_active_callback=TelegramTorrentController.STATUS_ACTIVE_CALLBACK,
+        status_refresh_prefix=TelegramTorrentController.STATUS_REFRESH_PREFIX,
+        cancel_callback=TelegramTorrentController.CANCEL_CALLBACK,
+        category_prefix=TelegramTorrentController.CATEGORY_PREFIX,
+        page_prefix=TelegramTorrentController.PAGE_PREFIX,
+        more_like_prefix=TelegramTorrentController.MORE_LIKE_PREFIX,
         download_dir_options=DEFAULT_DOWNLOAD_DIR_OPTIONS,
     )
     messages = MessageFactory()
@@ -116,9 +149,12 @@ def build_app(
     application.add_handler(CommandHandler("start", controller.handle_start))
     application.add_handler(CommandHandler("help", controller.handle_help))
     application.add_handler(CommandHandler("status", controller.handle_status_command))
+    application.add_handler(CommandHandler("start_magnet", controller.handle_start_magnet))
+    application.add_handler(CommandHandler("remove", controller.handle_remove))
     application.add_handler(CallbackQueryHandler(controller.handle_candidate_button))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, controller.handle_text))
     controller.enable_background_tasks(application)
+    application.post_init = _chain_lifecycle_callback(application.post_init, _set_bot_commands)
     return application
 
 

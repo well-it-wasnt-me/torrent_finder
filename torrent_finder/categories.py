@@ -31,6 +31,12 @@ _PRESETS: Tuple[CategoryPreset, ...] = (
         aliases=("tv", "tvshow", "tv-show", "tv shows", "tv show", "series", "tvseries"),
     ),
     CategoryPreset(
+        slug="comics",
+        label="Comics",
+        categories="7030",
+        aliases=("comic", "comics", "graphic novel", "graphic novels"),
+    ),
+    CategoryPreset(
         slug="software",
         label="Software",
         categories="4000",
@@ -49,10 +55,16 @@ _PRESETS: Tuple[CategoryPreset, ...] = (
         aliases=("software win", "software windows", "win software", "windows software", "windows"),
     ),
     CategoryPreset(
+        slug="zip",
+        label="Zip / Archives",
+        categories="8000",
+        aliases=("zip", "zipfile", "zip files", "archive", "archives", "rar", "7z"),
+    ),
+    CategoryPreset(
         slug="all",
         label="All categories",
         categories="",
-        aliases=("all", "any"),
+        aliases=("all", "any", "anything", "everything", "dump", "dump whatever", "whatever"),
     ),
 )
 

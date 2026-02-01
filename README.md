@@ -50,7 +50,7 @@ yes, the defaults are just suggestions:
 
 **Highlights**:
 - `torznab.url` and `torznab.apikey` are the secret handshake to your indexers. No handshake, no magnets.
-- `torznab.categories` keeps the noise down. Comma-separated, like a grocery list, minus the kale—and now you can pass `--category movies|tv|software|software-mac|software-win|all` for the common presets without remembering IDs.
+- `torznab.categories` keeps the noise down. Comma-separated, like a grocery list, minus the kale—and now you can pass `--category movies|tv|comics|software|software-mac|software-win|zip|all` for the common presets without remembering IDs.
 - `transmission.start` decides if Transmission hits the gas or waits politely in park.
 - `logging.level` understands "DEBUG", "INFO", "WARNING", and "ERROR". No, "LOUD" is not an option.
 - Add a `telegram` section when you want the chat bot to pick up credentials:
@@ -104,9 +104,11 @@ Prefer raw Torznab IDs? Keep `--categories "2000,5000"` around for custom combos
 |---------------|---------------------|-------------------------------------------|-----------------------------------------|
 | `movies`      | `2000`              | `--category movies`                       | `search movies dune`                    |
 | `tv`          | `5000`              | `--category tv`                           | `search tv the bear`                    |
+| `comics`      | `7030`              | `--category comics`                       | `search comics saga`                    |
 | `software`    | `4000`              | `--category software`                     | `search software blender`               |
 | `software-mac`| `4050`              | `--category software-mac`                 | `search software mac final cut`         |
 | `software-win`| `4010,4020`         | `--category software-win`                 | `search software win office`            |
+| `zip`         | `8000`              | `--category zip`                          | `search zip files pack`                 |
 | `all`         | no filter           | `--category all`                          | `search all dune`                       |
 
 The presets piggyback on top of `torznab.categories`, so they work without touching `config.json`. Mix and match with the usual overrides to script one-off runs.
@@ -120,22 +122,24 @@ python telegram_bot.py --token "<bot api token>" --config config.json
 ```
 
 Flow:
-- Send `search the movie title` to the bot.
-- Add an optional category word—`search movies dune`, `search tv s04`, `search software mac final cut`, or `search all dune`—to switch Torznab filters without editing the config.
-- It responds with the top five matches (seed/leech counts included).
+- Run `/start` to open the inline menu, then tap **Search** or a category button (you can still type `search <title>`).
+- Add an optional category word—`search movies dune`, `search tv s04`, `search comics saga`, `search software mac final cut`, `search zip files pack`, or `search all dune`—to switch Torznab filters without editing the config.
+- It responds with ranked cards (title, seed/peer counts, size, source) plus Next/Prev paging and a **More like** button.
 - Reply with the list number *or tap the inline button* to pick a result; the bot will then ask where to save it and show a couple of download directory buttons.
 - Update the directory presets in `telegram_bot.py` (`_download_dir_options`) to match your Transmission setup before relying on the buttons; you can add more paths or point them at your existing watch/download folders.
-- Send `status` (or tap the button under the results) any time to see every torrent plus a quick explanation of each state (downloading, seeding, stopped, etc.).
+- Send `status` (or tap **Status**) any time to see every torrent plus a quick explanation of each state (downloading, seeding, stopped, etc.). Active/All filters and a refresh button keep the status message in place. The status block includes the Transmission ID for removals.
 - The bot pings you once a Telegram-triggered download finishes so you can hit play quicker.
 
 The token can also come from the `telegram.bot_token` section in `config.json` (or `TELEGRAM_TOKEN`). Add
 `telegram.chat_id` if you want to lock the bot to a single chat/channel. Use `--max-results` to tweak
-how many options are shown. `/start` drops a tiny reply keyboard with Status/Help shortcuts so you can keep tapping instead of typing.
+how many options are shown. `/start` opens the inline menu with Search/Status/Help plus category shortcuts.
 
 **Quick commands**
-- `search <query>` – fetches results; prefix with `movies`, `tv`, `software`, `software mac`, `software win`, or `all` to reuse the presets listed above.
+- `search <query>` – fetches results; prefix with `movies`, `tv`, `comics`, `software`, `software mac`, `software win`, `zip`, or `all` to reuse the presets listed above.
+- `/start_magnet <magnet_url>` – send a magnet link straight to Transmission.
 - `<number>` – selects one of the previous results (inline buttons do the same).
-- `status` – lists every torrent and annotates Transmission’s reported state (also available as a dedicated button and inline callback).
+- `status` – lists every torrent and annotates Transmission’s reported state (also available via the **Status** button).
+- `/remove <id or name>` – stop and remove a torrent (use the numeric ID from `status` for precision).
 - `help` / `/help` – shows the condensed cheat-sheet.
 
 > **Heads up:** background status polling uses Python Telegram Bot's JobQueue. Install the optional extra via
