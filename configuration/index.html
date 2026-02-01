@@ -131,7 +131,7 @@
 <ul>
 <li><code>url</code>: Base Torznab/Jackett endpoint (required).</li>
 <li><code>apikey</code>: API key for the feed (required).</li>
-<li><code>categories</code>: optional comma-separated category identifiers to filter search results. Use the CLI shortcut <code>--category movies|tv|software|software-mac|software-win|all</code> (or issue <code>search movies &lt;title&gt;</code> inside Telegram) when you prefer named presets over raw IDs.</li>
+<li><code>categories</code>: optional comma-separated category identifiers to filter search results. Use the CLI shortcut <code>--category movies|tv|comics|software|software-mac|software-win|zip|all</code> (or issue <code>search movies &lt;title&gt;</code> inside Telegram) when you prefer named presets over raw IDs.</li>
 <li><code>user_agent</code>: custom HTTP <code>User-Agent</code> string. Defaults to <code>Mozilla/5.0 (compatible; MagnetFinder/torznab-only 1.0)</code>.</li>
 <li><code>request_timeout</code>: timeout in seconds for Torznab requests (float, default <code>12.0</code>).</li>
 <li><code>sleep_between_requests</code>: delay in seconds between requests to avoid hammering the indexer (float, default <code>0.6</code>).</li>
@@ -154,7 +154,7 @@
 <li><code>bot_token</code>: Telegram bot token obtained from BotFather. Required when this section is present and enables the chat controller.</li>
 <li><code>chat_id</code>: optional numeric chat ID. When provided, only that chat (or channel) may send commands to the bot. Leave it empty to accept messages from any chat that knows the bot’s username.</li>
 </ul>
-<p>Once configured, the bot accepts <code>search &lt;title&gt;</code> requests (including the same <code>movies</code>/<code>tv</code>/<code>software</code> preset keywords used by the CLI), replies with tappable inline buttons for each result, lets you send plain numbers to start downloads, and exposes <code>status</code>, <code>help</code>, and <code>/start</code> shortcuts—handy when you want to drive everything from your phone.</p>
+<p>Once configured, the bot accepts <code>search &lt;title&gt;</code> requests (including the same preset keywords used by the CLI), replies with tappable inline buttons for each result, lets you send plain numbers to start downloads, and exposes <code>status</code>, <code>help</code>, <code>/start</code>, <code>/start_magnet</code>, and <code>/remove</code> shortcuts—handy when you want to drive everything from your phone.</p>
 <h3 id="obtaining-the-telegram-credentials">Obtaining the Telegram credentials<a class="headerlink" href="#obtaining-the-telegram-credentials" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Open Telegram and talk to <a href="https://t.me/BotFather">@BotFather</a>.</li>
